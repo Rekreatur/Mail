@@ -1,8 +1,7 @@
 package management.mail.controllers;
 
 import management.mail.domain.Mail;
-import management.mail.repo.MailRepo;
-import org.springframework.beans.BeanUtils;
+import management.mail.services.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,19 +9,12 @@ import java.util.List;
 
 @RestController
 public class MailController {
-    private final MailRepo mailRepo;
-
     @Autowired
-    public MailController(MailRepo mailRepo) {
-        this.mailRepo = mailRepo;
-    }
-
-    @GetMapping(value = "Hello")
-    public String hello() {return "hello all";}
+    private MailService mailService;
 
     @GetMapping(value = "mails")                                //Получение списка всех зарегистрированных посылок
-    public List<Mail> list() {
-        return mailRepo.findAll();
+    public List<Mail> find_all() {
+        return mailService.find_all();
     }
 
     @GetMapping(value = "mail/{id}")                            //Получение посылки по её id
@@ -31,21 +23,14 @@ public class MailController {
     }
 
     @PostMapping(value = "reg")                                 //Регистрация новой посылки
-    public Mail registration(@RequestBody Mail mail) {
-        return mailRepo.save(mail);
-    }
+    public Mail registration(@RequestBody Mail mail) { return mailService.registration(mail);}
 
     @PutMapping(value = "edit/{id}")                            //Редактирование зарегистрированной посылки
     public Mail edit(
             @PathVariable("id") Mail mailfromdb,
             @RequestBody Mail mail
-    ) {
-        BeanUtils.copyProperties(mail, mailfromdb, "id");
-        return mailRepo.save(mailfromdb);
-    }
+    ) { return mailService.edit(mailfromdb, mail); }
 
     @DeleteMapping(value = "del/{id}")                          //Удаление посылки
-    public void delete(@PathVariable("id") Mail mail) {
-        mailRepo.delete(mail);
-    }
+    public void delete(@PathVariable("id") Mail mail) { mailService.delete(mail); }
 }
