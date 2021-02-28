@@ -24,32 +24,23 @@ public class TrafficService {
     @Autowired
     private MailRepo mailRepo;
 
-    public Object find_all() { return new ResponseEntity<>(trafficRepo.findAll(), HttpStatus.OK); }
+    public List<Traffic> find_all() { return trafficRepo.findAll(); }
 
     public Object get_path(Long id) {
         List<Traffic> traffic_list = new ArrayList<Traffic>();
-        for(Traffic t : trafficRepo.findAll())
-        {
-            if(t.getMail_id().equals(id))
-                traffic_list.add(t);
-        }
+
+        trafficRepo.findAll().stream().filter(x -> x.getMail_id().equals(id)).forEach(x -> traffic_list.add(x));
 
         return traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
     }
 
-    public Object get_status(Long id) {
+    public String get_status(Long id) {
         List<Traffic> traffic_list = new ArrayList<Traffic>();
         List<Mail> mail_list = new ArrayList<Mail>();
 
-        for(Traffic t : trafficRepo.findAll()) {
-            if(t.getMail_id().equals(id))
-                traffic_list.add(t);
-        }
+        trafficRepo.findAll().stream().filter(x -> x.getMail_id().equals(id)).forEach(x -> traffic_list.add(x));
 
-        for(Mail m : mailRepo.findAll()) {
-            if(m.getId().equals(id))
-                mail_list.add(m);
-        }
+        mailRepo.findAll().stream().filter(x -> x.getId().equals(id)).forEach(x -> mail_list.add(x));
 
         if(traffic_list.isEmpty()) {
             if(mail_list.isEmpty()) return "the parcel does not exist";
@@ -57,10 +48,11 @@ public class TrafficService {
         }
 
         traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
+
         if(traffic_list.get(traffic_list.size()-1).getStatus() != StatusEnum.delivered) {
             return "in transit";
         } else {
-            return new ResponseEntity<>(traffic_list.get(traffic_list.size() - 1).getStatus(), HttpStatus.OK);
+            return "delivered";
         }
     }
 
