@@ -4,8 +4,8 @@ import management.mail.domain.Mail;
 import management.mail.domain.Traffic;
 import management.mail.misc.StatusEnum;
 import management.mail.repo.MailRepo;
-import management.mail.repo.Post_Office_Repo;
 import management.mail.repo.TrafficRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,55 +17,42 @@ import java.util.List;
 
 @Service
 public class TrafficService {
-    private final TrafficRepo trafficRepo;
-    private final MailRepo mailRepo;
-    private final Post_Office_Repo post_office_repo;
 
-    Comparator<Traffic> comparator = Comparator.comparing(obj -> obj.getDate());
+    @Autowired
+    private TrafficRepo trafficRepo;
 
-    public TrafficService(TrafficRepo trafficRepo, MailRepo mailRepo, Post_Office_Repo post_office_repo) {
-        this.trafficRepo = trafficRepo;
-        this.mailRepo = mailRepo;
-        this.post_office_repo = post_office_repo;
-    }
+    @Autowired
+    private MailRepo mailRepo;
 
-    public Object find_all() { return new ResponseEntity<>(trafficRepo.findAll(), HttpStatus.OK); }
+    public List<Traffic> find_all() { return trafficRepo.findAll(); }
 
     public Object get_path(Long id) {
         List<Traffic> traffic_list = new ArrayList<Traffic>();
-        for(Traffic t : trafficRepo.findAll())
-        {
-            if(t.getMail_id().equals(id))
-                traffic_list.add(t);
-        }
-        traffic_list.sort(comparator);
-        return traffic_list;
+
+        trafficRepo.findAll().stream().filter(x -> x.getMail_id().equals(id)).forEach(x -> traffic_list.add(x));
+
+        return traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
     }
 
-    public Object get_status(Long id) {
+    public String get_status(Long id) {
         List<Traffic> traffic_list = new ArrayList<Traffic>();
         List<Mail> mail_list = new ArrayList<Mail>();
 
-        for(Traffic t : trafficRepo.findAll()) {
-            if(t.getMail_id().equals(id))
-                traffic_list.add(t);
-        }
+        trafficRepo.findAll().stream().filter(x -> x.getMail_id().equals(id)).forEach(x -> traffic_list.add(x));
 
-        for(Mail m : mailRepo.findAll()) {
-            if(m.getId().equals(id))
-                mail_list.add(m);
-        }
+        mailRepo.findAll().stream().filter(x -> x.getId().equals(id)).forEach(x -> mail_list.add(x));
 
         if(traffic_list.isEmpty()) {
             if(mail_list.isEmpty()) return "the parcel does not exist";
             else if(!mail_list.isEmpty()) return "registered";
         }
 
-        traffic_list.sort(comparator);
+        traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
+
         if(traffic_list.get(traffic_list.size()-1).getStatus() != StatusEnum.delivered) {
             return "in transit";
         } else {
-            return new ResponseEntity<>(traffic_list.get(traffic_list.size() - 1).getStatus(), HttpStatus.OK);
+            return "delivered";
         }
     }
 
@@ -99,7 +86,7 @@ public class TrafficService {
             }
         }
 
-        traffic_list.sort(comparator);
+        traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
 
         if(!traffic_list.isEmpty()) {
             if (traffic.getStatus() == StatusEnum.arrived) {

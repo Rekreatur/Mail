@@ -3,17 +3,17 @@ package management.mail.services;
 import management.mail.domain.Post_Office;
 import management.mail.repo.Post_Office_Repo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class Post_Office_Service {
-    private final Post_Office_Repo post_office_repo;
 
-    public Post_Office_Service(Post_Office_Repo post_office_repo) {
-        this.post_office_repo = post_office_repo;
-    }
+    @Autowired
+    private Post_Office_Repo post_office_repo;
 
     public List<Post_Office> find_all() {
         return post_office_repo.findAll();

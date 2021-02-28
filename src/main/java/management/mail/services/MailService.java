@@ -3,17 +3,16 @@ package management.mail.services;
 import management.mail.domain.Mail;
 import management.mail.repo.MailRepo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class MailService {
-    private final MailRepo mailRepo;
 
-    public MailService(MailRepo mailRepo) {
-        this.mailRepo = mailRepo;
-    }
+    @Autowired
+    private MailRepo mailRepo;
 
     public List<Mail> find_all() { return mailRepo.findAll(); }
 
