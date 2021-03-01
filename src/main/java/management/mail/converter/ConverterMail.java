@@ -37,4 +37,12 @@ public class ConverterMail {
     public List<Mail> dtoToEntity(List<MailDto> dto) {
         return dto.stream().map(x -> dtoToEntity(x)).collect(Collectors.toList());
     }
+
+    public Mail dtoToEntityEdit(MailDto mailDto, Mail mail) {
+        mail.setType(mailDto.getType());
+        mail.setIndex(mailDto.getIndex());
+        mail.setAddress(mailDto.getAddress());
+        mail.setName(mailDto.getName());
+        return mail;
+    }
 }
