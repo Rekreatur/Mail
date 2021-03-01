@@ -24,18 +24,24 @@ public class MailService implements MailServiceInter {
         return converterMail.entityToDto(findAll);
     }
 
-    public Mail getOne(Long id) { return mailRepo.findById(id).get(); }
-
-    public Mail registration(Mail mail) { return mailRepo.save(mail); }
-
-    public Mail edit(Long id, Mail mail) {
-        Mail mailfEdit =  mailRepo.findById(id).get();
-        mailfEdit.setType(mail.getType());
-        mailfEdit.setIndex(mail.getIndex());
-        mailfEdit.setAddress(mail.getAddress());
-        mailfEdit.setName(mail.getName());
-        return mailRepo.saveAndFlush(mailfEdit);
+    public MailDto getOne(Long id) {
+        Mail mail = mailRepo.findById(id).get();
+        return converterMail.entityToDto(mail);
     }
 
-    public void delete(Mail mail) { mailRepo.delete(mail); }
+    public MailDto registration(MailDto mailDto) {
+        Mail mail = converterMail.dtoToEntity(mailDto);
+        mail = mailRepo.save(mail);
+        return converterMail.entityToDto(mail);
+    }
+
+    public MailDto edit(Long id, MailDto mailDto) {
+        Mail mailEdit =  mailRepo.findById(id).get();
+        converterMail.dtoToEntityEdit(mailDto, mailEdit);
+        return converterMail.entityToDto(mailRepo.saveAndFlush(mailEdit));
+    }
+
+    public void delete(Long id) {
+        mailRepo.delete(mailRepo.findById(id).get()); 
+    }
 }
