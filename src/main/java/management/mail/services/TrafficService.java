@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class TrafficService {
@@ -26,7 +27,7 @@ public class TrafficService {
 
     public List<Traffic> find_all() { return trafficRepo.findAll(); }
 
-    public Object get_path(Long id) {
+    public Stream<Traffic> get_path(Long id) {
         List<Traffic> traffic_list = new ArrayList<Traffic>();
 
         trafficRepo.findAll().stream().filter(x -> x.getMail_id().equals(id)).forEach(x -> traffic_list.add(x));
