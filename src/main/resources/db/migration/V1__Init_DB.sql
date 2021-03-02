@@ -20,6 +20,8 @@ create table traffic (
 id int8 primary key not null,
 date timestamp not null,
 status int4 not null,
-mail_id int8 references mail(id) not null,
-post_office_id int8 references office(id) not null
+mail_id int8 not null,
+post_office_id int8 not null,
+FOREIGN KEY(mail_id) references mail(id) ON DELETE CASCADE ,
+FOREIGN KEY(post_office_id) references office(id) ON DELETE CASCADE
 );
