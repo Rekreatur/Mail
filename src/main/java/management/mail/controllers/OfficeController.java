@@ -1,38 +1,45 @@
 package management.mail.controllers;
 
-import management.mail.domain.Office;
+import java.util.List;
+import management.mail.dto.OfficeDto;
 import management.mail.services.OfficeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class OfficeController {
-    @Autowired
-    private OfficeService _office_service;
 
-    @GetMapping(value = "offices")                                  //Получение списка всех почтовых отделений
-    public List<Office> find_all() { return _office_service.find_all(); }
+  @Autowired
+  private OfficeService officeService;
 
-    @GetMapping(value = "office/{id}")                              //Получение почтового отделения по его id
-    public Office getOne(@PathVariable("id") Office _office) {
-        return _office;
-    }
+  @GetMapping(value = "offices")
+  public List<OfficeDto> findAll() {
+    return officeService.findAll();
+  }
 
-    @PostMapping(value = "newoff")                                  //Добавление почтового отделения
-    public Office new_office(@RequestBody Office _office) {
-        return _office_service.new_office(_office);
-    }
+  @GetMapping(value = "office/{id}")
+  public OfficeDto getOne(@PathVariable(name = "id") Long id) {
+    return officeService.getOne(id);
+  }
 
-    @PutMapping(value = "editoff/{id}")                             //Редактирование информации о почтовом отделении
-    public Office edit(
-            @PathVariable("id") Office _office_frombd,
-            @RequestBody Office _office
-    ) {
-        return _office_service.edit(_office_frombd, _office);
-    }
+  @PostMapping(value = "newoffice")
+  public OfficeDto newOffice(@RequestBody OfficeDto officeDto) {
+    return officeService.newOffice(officeDto);
+  }
 
-    @DeleteMapping(value = "deloff/{id}")                           //Удаление почтового отделения
-    public void delete(@PathVariable("id") Office _office) { _office_service.delete(_office); }
+  @PutMapping(value = "editoffice/{id}")
+  public OfficeDto edit(@PathVariable(name = "id") Long id, @RequestBody OfficeDto officeDto) {
+    return officeService.edit(id, officeDto);
+  }
+
+  @DeleteMapping(value = "deleteoffice/{id}")
+  public void delete(@PathVariable(name = "id") Long id) {
+    officeService.delete(id);
+  }
 }

@@ -37,8 +37,7 @@ public class MailService implements MailServiceInter {
    * @return список почтовых отправлений
    */
   public List<MailDto> findAll() {
-    List<Mail> findAll = mailRepository.findAll();
-    return mailConverter.entityToDto(findAll);
+    return mailConverter.entityToDto(mailRepository.findAll());
   }
 
   /**
@@ -48,8 +47,7 @@ public class MailService implements MailServiceInter {
    * @return почтовое отправление
    */
   public MailDto getOne(Long id) {
-    Mail mail = mailRepository.findById(id).get();
-    return mailConverter.entityToDto(mail);
+    return mailConverter.entityToDto(mailRepository.findById(id).get());
   }
 
   /**
@@ -60,8 +58,7 @@ public class MailService implements MailServiceInter {
    */
   public MailDto registration(MailDto mailDto) {
     Mail mail = mailConverter.dtoToEntity(mailDto);
-    mail = mailRepository.save(mail);
-    return mailConverter.entityToDto(mail);
+    return mailConverter.entityToDto(mailRepository.save(mail));
   }
 
   /**
