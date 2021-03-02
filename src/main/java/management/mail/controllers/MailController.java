@@ -1,6 +1,6 @@
 package management.mail.controllers;
 
-import management.mail.domain.Mail;
+import management.mail.constants.MailMapConstant;
 import management.mail.dto.MailDto;
 import management.mail.interservices.MailServiceInter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,25 +8,73 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Контроллер для регистрации почтовых отправлений
+ *
+ * @author Байрамов Искандер
+ * @version 1.1
+ */
 @RestController
 public class MailController {
-    @Autowired
-    private MailServiceInter mailService;
 
-    @GetMapping(value = "mails")                                //Получение списка всех зарегистрированных посылок
-    public List<MailDto> find_all() { return mailService.find_all(); }
+  /**
+   * Сервис, содержащий методы обработки почтовых отправлений
+   */
+  @Autowired
+  private MailServiceInter mailService;
 
-    @GetMapping(value = "mail/{id}")                            //Получение посылки по её id
-    public MailDto getOne(@PathVariable(name = "id") Long id) {
-        return mailService.getOne(id);
-    }
+  /**
+   * Метод получения списка всех зарегистрированных почтовых отправлений
+   *
+   * @return список почтовых отправлений
+   */
+  @GetMapping(value = MailMapConstant.MAILS_ALL)
+  public List<MailDto> findAll() {
+    return mailService.findAll();
+  }
 
-    @PostMapping(value = "registration")                                 //Регистрация новой посылки
-    public MailDto registration(@RequestBody MailDto mailDto) { return mailService.registration(mailDto);}
+  /**
+   * Метод получения почтового отправления по его id
+   *
+   * @param id это параметр, задающий id необходимого почтового отправления
+   * @return почтовое отправление
+   */
+  @GetMapping(value = MailMapConstant.MAIL_ONE)
+  public MailDto getOne(@PathVariable(name = "id") Long id) {
+    return mailService.getOne(id);
+  }
 
-    @PutMapping(value = "edit/{id}")                            //Редактирование зарегистрированной посылки
-    public MailDto edit(@PathVariable(name = "id") Long id ,@RequestBody MailDto mailDto) { return mailService.edit(id,mailDto); }
+  /**
+   * Метод регистрации нового почтового отправления
+   *
+   * @param mailDto это параметр с данными для регистрации
+   * @return зарегистрированное почтовое отправление
+   */
+  @PostMapping(value = MailMapConstant.MAIL_REGISTRATION)
+  public MailDto registration(@RequestBody MailDto mailDto) {
+    return mailService.registration(mailDto);
+  }
 
-    @DeleteMapping(value = "delete/{id}")                          //Удаление посылки
-    public void delete(@PathVariable(name = "id") Long id) { mailService.delete(id); }
+  /**
+   * Метод для изменения зарегистрированного почтового отправления
+   *
+   * @param id      это параметр, задающий id почтового отправления, которое необходимо изменить
+   * @param mailDto это параметр с данными, которые необходимо внести для изменения в почтовое
+   *                отправления
+   * @return изменённое почтовое отправление
+   */
+  @PutMapping(value = MailMapConstant.MAIL_EDIT)
+  public MailDto edit(@PathVariable(name = "id") Long id, @RequestBody MailDto mailDto) {
+    return mailService.edit(id, mailDto);
+  }
+
+  /**
+   * Метод для удаления почтового отправления
+   *
+   * @param id это параметр, задающий id почтового отправления, которое необходимо удалить
+   */
+  @DeleteMapping(value = MailMapConstant.MAIL_DELETE)
+  public void delete(@PathVariable(name = "id") Long id) {
+    mailService.delete(id);
+  }
 }

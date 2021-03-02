@@ -2,7 +2,7 @@ package management.mail.services;
 
 import management.mail.domain.Mail;
 import management.mail.domain.Traffic;
-import management.mail.misc.StatusEnum;
+import management.mail.constants.OfficeStatusEnum;
 import management.mail.repo.MailRepo;
 import management.mail.repo.TrafficRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class TrafficService {
 
         traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
 
-        if(traffic_list.get(traffic_list.size()-1).getStatus() != StatusEnum.delivered) {
+        if(traffic_list.get(traffic_list.size()-1).getStatus() != OfficeStatusEnum.DELIVERED) {
             return "in transit";
         } else {
             return "delivered";
@@ -68,40 +68,40 @@ public class TrafficService {
                 arrived_flag_null = true;
                 traffic_list.add(t);
 
-                if(t.getStatus() == StatusEnum.delivered)
+                if(t.getStatus() == OfficeStatusEnum.DELIVERED)
                     return "already delivered";
 
                 if((t.getPost_office_id() == traffic.getPost_office_id()) &&
-                        (t.getStatus() == StatusEnum.departed) &&
-                        (traffic.getStatus() != StatusEnum.arrived)) {
+                        (t.getStatus() == OfficeStatusEnum.DEPARTED) &&
+                        (traffic.getStatus() != OfficeStatusEnum.ARRIVED)) {
                     return "the package has already been sent";
                 }
 
                 if(t.getPost_office_id() == traffic.getPost_office_id()) {
-                    if((t.getStatus() == StatusEnum.arrived) && (traffic.getStatus() == StatusEnum.arrived))
+                    if((t.getStatus() == OfficeStatusEnum.ARRIVED) && (traffic.getStatus() == OfficeStatusEnum.ARRIVED))
                         return "the parcel is already in the post office";
                 }
 
                 if((t.getPost_office_id() == traffic.getPost_office_id()) &&
-                        (t.getStatus() == StatusEnum.arrived)) arrived_flag = true;
+                        (t.getStatus() == OfficeStatusEnum.ARRIVED)) arrived_flag = true;
             }
         }
 
         traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
 
         if(!traffic_list.isEmpty()) {
-            if (traffic.getStatus() == StatusEnum.arrived) {
-                if (traffic_list.get(traffic_list.size() - 1).getStatus() != StatusEnum.departed)
+            if (traffic.getStatus() == OfficeStatusEnum.ARRIVED) {
+                if (traffic_list.get(traffic_list.size() - 1).getStatus() != OfficeStatusEnum.DEPARTED)
                     return "The parcel is located in another post office";
             }
-        } else if(traffic.getStatus() != StatusEnum.arrived)
+        } else if(traffic.getStatus() != OfficeStatusEnum.ARRIVED)
             return "The parcel is located in another post office";
 
         if(!arrived_flag_null) {
-            if(traffic.getStatus() != StatusEnum.arrived) return "the parcel is not in the post office";
+            if(traffic.getStatus() != OfficeStatusEnum.ARRIVED) return "the parcel is not in the post office";
         }
 
-        if(traffic.getStatus() != StatusEnum.arrived) {
+        if(traffic.getStatus() != OfficeStatusEnum.ARRIVED) {
             if(!arrived_flag) return "the parcel is not in the post office";
         }
 
