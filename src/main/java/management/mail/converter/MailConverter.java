@@ -71,7 +71,7 @@ public class MailConverter {
   /**
    * Метод, изменяющий Entity Mail путём передачи значений из MailDto в Entity Mail
    *
-   * @param mailDto это MailDto со значениями, которые необходимо сохранить
+   * @param mailDto это MailDto со значениями, которые необходимо передать
    * @param mail    это Entity Mail, которую необходимо изменить
    * @return Entity Mail, которая была изменена
    */

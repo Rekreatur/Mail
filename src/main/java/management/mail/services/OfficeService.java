@@ -1,33 +1,43 @@
 package management.mail.services;
 
+import java.util.List;
+import management.mail.converter.OfficeConverter;
 import management.mail.domain.Office;
+import management.mail.dto.OfficeDto;
+import management.mail.interservices.OfficeServiceInter;
 import management.mail.repo.OfficeRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class OfficeService {
+public class OfficeService implements OfficeServiceInter {
 
-    @Autowired
-    private OfficeRepository _office_repository;
+  @Autowired
+  private OfficeRepository officeRepository;
 
-    public List<Office> find_all() {
-        return _office_repository.findAll();
-    }
+  @Autowired
+  private OfficeConverter officeConverter;
 
-    public Office new_office(Office _office) {
-        return _office_repository.save(_office);
-    }
+  public List<OfficeDto> findAll() {
+    return officeConverter.entityToDto(officeRepository.findAll());
+  }
 
-    public Office edit( Office _office_frombd, Office _office) {
-        BeanUtils.copyProperties(_office, _office_frombd, "id");
-        return _office_repository.save(_office_frombd);
-    }
+  public OfficeDto getOne(Long id) {
+    return officeConverter.entityToDto(officeRepository.findById(id).get());
+  }
 
-    public void delete(Office _office) {
-        _office_repository.delete(_office);
-    }
+  public OfficeDto newOffice(OfficeDto officeDto) {
+    Office office = officeConverter.dtoToEntity(officeDto);
+    return officeConverter.entityToDto(officeRepository.save(office));
+  }
+
+  public OfficeDto edit(Long id, OfficeDto officeDto) {
+    Office officeEdit = officeRepository.findById(id).get();
+    officeConverter.dtoToEntityEdit(officeDto, officeEdit);
+    return officeConverter.entityToDto(officeRepository.saveAndFlush(officeEdit));
+  }
+
+  public void delete(Long id) {
+    officeRepository.delete(officeRepository.findById(id).get());
+  }
 }
