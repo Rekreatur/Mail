@@ -1,6 +1,6 @@
 package management.mail.services;
 
-import management.mail.converter.ConverterMail;
+import management.mail.converter.MailConverter;
 import management.mail.domain.Mail;
 import management.mail.dto.MailDto;
 import management.mail.interservices.MailServiceInter;
@@ -29,7 +29,7 @@ public class MailService implements MailServiceInter {
    * Сервис для конвертации MailDto в Entity Mail и Entity Mail в MailDto
    */
   @Autowired
-  ConverterMail converterMail;
+  MailConverter mailConverter;
 
   /**
    * Метод получения списка всех зарегистрированных почтовых отправлений
@@ -38,7 +38,7 @@ public class MailService implements MailServiceInter {
    */
   public List<MailDto> findAll() {
     List<Mail> findAll = mailRepository.findAll();
-    return converterMail.entityToDto(findAll);
+    return mailConverter.entityToDto(findAll);
   }
 
   /**
@@ -49,7 +49,7 @@ public class MailService implements MailServiceInter {
    */
   public MailDto getOne(Long id) {
     Mail mail = mailRepository.findById(id).get();
-    return converterMail.entityToDto(mail);
+    return mailConverter.entityToDto(mail);
   }
 
   /**
@@ -59,9 +59,9 @@ public class MailService implements MailServiceInter {
    * @return зарегистрированное почтовое отправление
    */
   public MailDto registration(MailDto mailDto) {
-    Mail mail = converterMail.dtoToEntity(mailDto);
+    Mail mail = mailConverter.dtoToEntity(mailDto);
     mail = mailRepository.save(mail);
-    return converterMail.entityToDto(mail);
+    return mailConverter.entityToDto(mail);
   }
 
   /**
@@ -74,8 +74,8 @@ public class MailService implements MailServiceInter {
    */
   public MailDto edit(Long id, MailDto mailDto) {
     Mail mailEdit = mailRepository.findById(id).get();
-    converterMail.dtoToEntityEdit(mailDto, mailEdit);
-    return converterMail.entityToDto(mailRepository.saveAndFlush(mailEdit));
+    mailConverter.dtoToEntityEdit(mailDto, mailEdit);
+    return mailConverter.entityToDto(mailRepository.saveAndFlush(mailEdit));
   }
 
   /**

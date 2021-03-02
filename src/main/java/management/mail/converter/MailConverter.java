@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * @version 1.1
  */
 @Service
-public class ConverterMail {
+public class MailConverter {
 
   /**
    * Метод конвертации Entity Mail в MailDto
