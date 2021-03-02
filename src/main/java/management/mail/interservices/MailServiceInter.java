@@ -1,14 +1,54 @@
 package management.mail.interservices;
 
-import management.mail.domain.Mail;
 import management.mail.dto.MailDto;
 
 import java.util.List;
 
+/**
+ * Интерфейс с методами для работы с почтовыми отправлениями
+ *
+ * @author Байрамов Искандер
+ * @version 1.1
+ */
 public interface MailServiceInter {
-    public List<MailDto> find_all();
-    public MailDto getOne(Long id);
-    public MailDto registration(MailDto mailDto);
-    public MailDto edit(Long id, MailDto mailDto);
-    public void delete(Long id);
+
+  /**
+   * Метод получения списка всех зарегистрированных почтовых отправлений
+   *
+   * @return список почтовых отправлений
+   */
+  List<MailDto> findAll();
+
+  /**
+   * Метод получения почтового отправления по его id
+   *
+   * @param id это параметр, задающий id необходимого почтового отправления
+   * @return почтовое отправление
+   */
+  MailDto getOne(Long id);
+
+  /**
+   * Метод регистрации нового почтового отправления
+   *
+   * @param mailDto это параметр с данными для регистрации
+   * @return зарегистрированное почтовое отправление
+   */
+  MailDto registration(MailDto mailDto);
+
+  /**
+   * Метод для изменения зарегистрированного почтового отправления
+   *
+   * @param id      это параметр, задающий id почтового отправления, которое необходимо изменить
+   * @param mailDto это параметр с данными, которые необходимо внести для изменения в почтовое
+   *                отправления
+   * @return изменённое почтовое отправление
+   */
+  MailDto edit(Long id, MailDto mailDto);
+
+  /**
+   * Метод для удаления почтового отправления
+   *
+   * @param id это параметр, задающий id почтового отправления, которое необходимо удалить
+   */
+  void delete(Long id);
 }
