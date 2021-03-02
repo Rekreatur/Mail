@@ -3,8 +3,8 @@ package management.mail.services;
 import management.mail.domain.Mail;
 import management.mail.domain.Traffic;
 import management.mail.constants.OfficeStatusEnum;
-import management.mail.repo.MailRepo;
-import management.mail.repo.TrafficRepo;
+import management.mail.repo.MailRepository;
+import management.mail.repo.TrafficRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +20,17 @@ import java.util.stream.Stream;
 public class TrafficService {
 
     @Autowired
-    private TrafficRepo trafficRepo;
+    private TrafficRepository trafficRepository;
 
     @Autowired
-    private MailRepo mailRepo;
+    private MailRepository mailRepository;
 
-    public List<Traffic> find_all() { return trafficRepo.findAll(); }
+    public List<Traffic> find_all() { return trafficRepository.findAll(); }
 
     public Stream<Traffic> get_path(Long id) {
         List<Traffic> traffic_list = new ArrayList<Traffic>();
 
-        trafficRepo.findAll().stream().filter(x -> x.getMail_id().equals(id)).forEach(x -> traffic_list.add(x));
+        trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(id)).forEach(x -> traffic_list.add(x));
 
         return traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
     }
@@ -39,9 +39,9 @@ public class TrafficService {
         List<Traffic> traffic_list = new ArrayList<Traffic>();
         List<Mail> mail_list = new ArrayList<Mail>();
 
-        trafficRepo.findAll().stream().filter(x -> x.getMail_id().equals(id)).forEach(x -> traffic_list.add(x));
+        trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(id)).forEach(x -> traffic_list.add(x));
 
-        mailRepo.findAll().stream().filter(x -> x.getId().equals(id)).forEach(x -> mail_list.add(x));
+        mailRepository.findAll().stream().filter(x -> x.getId().equals(id)).forEach(x -> mail_list.add(x));
 
         if(traffic_list.isEmpty()) {
             if(mail_list.isEmpty()) return "the parcel does not exist";
@@ -62,7 +62,7 @@ public class TrafficService {
         boolean arrived_flag_null = false;
         boolean arrived_flag = false;
 
-        for(Traffic t : trafficRepo.findAll())
+        for(Traffic t : trafficRepository.findAll())
         {
             if(t.getMail_id() == traffic.getMail_id()) {
                 arrived_flag_null = true;
@@ -108,7 +108,7 @@ public class TrafficService {
         traffic.setDate(LocalDateTime.now());
 
         try{
-            trafficRepo.save(traffic);
+            trafficRepository.save(traffic);
         } catch (Exception e) {
             return e;
         }

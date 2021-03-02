@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table
 @Data
-public class Post_Office {
+public class Office {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
