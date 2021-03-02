@@ -4,7 +4,7 @@ import management.mail.converter.ConverterMail;
 import management.mail.domain.Mail;
 import management.mail.dto.MailDto;
 import management.mail.interservices.MailServiceInter;
-import management.mail.repo.MailRepo;
+import management.mail.repo.MailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class MailService implements MailServiceInter {
    * Репозиторий для работы с Entity Mail
    */
   @Autowired
-  private MailRepo mailRepo;
+  private MailRepository mailRepository;
 
   /**
    * Сервис для конвертации MailDto в Entity Mail и Entity Mail в MailDto
@@ -37,7 +37,7 @@ public class MailService implements MailServiceInter {
    * @return список почтовых отправлений
    */
   public List<MailDto> findAll() {
-    List<Mail> findAll = mailRepo.findAll();
+    List<Mail> findAll = mailRepository.findAll();
     return converterMail.entityToDto(findAll);
   }
 
@@ -48,7 +48,7 @@ public class MailService implements MailServiceInter {
    * @return почтовое отправление
    */
   public MailDto getOne(Long id) {
-    Mail mail = mailRepo.findById(id).get();
+    Mail mail = mailRepository.findById(id).get();
     return converterMail.entityToDto(mail);
   }
 
@@ -60,7 +60,7 @@ public class MailService implements MailServiceInter {
    */
   public MailDto registration(MailDto mailDto) {
     Mail mail = converterMail.dtoToEntity(mailDto);
-    mail = mailRepo.save(mail);
+    mail = mailRepository.save(mail);
     return converterMail.entityToDto(mail);
   }
 
@@ -73,9 +73,9 @@ public class MailService implements MailServiceInter {
    * @return изменённое почтовое отправление
    */
   public MailDto edit(Long id, MailDto mailDto) {
-    Mail mailEdit = mailRepo.findById(id).get();
+    Mail mailEdit = mailRepository.findById(id).get();
     converterMail.dtoToEntityEdit(mailDto, mailEdit);
-    return converterMail.entityToDto(mailRepo.saveAndFlush(mailEdit));
+    return converterMail.entityToDto(mailRepository.saveAndFlush(mailEdit));
   }
 
   /**
@@ -84,6 +84,6 @@ public class MailService implements MailServiceInter {
    * @param id это параметр, задающий id почтового отправления, которое необходимо удалить
    */
   public void delete(Long id) {
-    mailRepo.delete(mailRepo.findById(id).get());
+    mailRepository.delete(mailRepository.findById(id).get());
   }
 }

@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  * @version 1.1
  */
 @Repository
-public interface MailRepo extends JpaRepository<Mail, Long> {
+public interface MailRepository extends JpaRepository<Mail, Long> {
 
 }

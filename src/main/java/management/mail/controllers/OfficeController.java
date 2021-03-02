@@ -1,38 +1,38 @@
 package management.mail.controllers;
 
-import management.mail.domain.Post_Office;
-import management.mail.services.Post_Office_Service;
+import management.mail.domain.Office;
+import management.mail.services.OfficeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-public class Post_Office_Controller {
+public class OfficeController {
     @Autowired
-    private Post_Office_Service post_office_service;
+    private OfficeService _office_service;
 
     @GetMapping(value = "offices")                                  //Получение списка всех почтовых отделений
-    public List<Post_Office> find_all() { return post_office_service.find_all(); }
+    public List<Office> find_all() { return _office_service.find_all(); }
 
     @GetMapping(value = "office/{id}")                              //Получение почтового отделения по его id
-    public Post_Office getOne(@PathVariable("id") Post_Office post_office) {
-        return post_office;
+    public Office getOne(@PathVariable("id") Office _office) {
+        return _office;
     }
 
     @PostMapping(value = "newoff")                                  //Добавление почтового отделения
-    public Post_Office new_office(@RequestBody Post_Office post_office) {
-        return post_office_service.new_office(post_office);
+    public Office new_office(@RequestBody Office _office) {
+        return _office_service.new_office(_office);
     }
 
     @PutMapping(value = "editoff/{id}")                             //Редактирование информации о почтовом отделении
-    public Post_Office edit(
-            @PathVariable("id") Post_Office post_office_frombd,
-            @RequestBody Post_Office post_office
+    public Office edit(
+            @PathVariable("id") Office _office_frombd,
+            @RequestBody Office _office
     ) {
-        return post_office_service.edit(post_office_frombd, post_office);
+        return _office_service.edit(_office_frombd, _office);
     }
 
     @DeleteMapping(value = "deloff/{id}")                           //Удаление почтового отделения
-    public void delete(@PathVariable("id") Post_Office post_office) { post_office_service.delete(post_office); }
+    public void delete(@PathVariable("id") Office _office) { _office_service.delete(_office); }
 }
