@@ -13,7 +13,7 @@ public class TrafficController {
     private TrafficService trafficService;
 
     @GetMapping(value = "traffic")                                //Получение информации о передвижениях всех посылок
-    public Object find_all() { return trafficService.find_all(); }
+    public Object find_all() { return trafficService.findAll(); }
 
     @GetMapping(value = "traffic/{id}")                          //Получение информации о конкретной записи передвижения
     public Object getOne(@PathVariable("id") Traffic traffic) {
