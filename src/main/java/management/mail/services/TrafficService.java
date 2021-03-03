@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Stream;
 import management.mail.constants.TrafficOfficeStatusEnum;
 import management.mail.domain.Mail;
 import management.mail.domain.Traffic;
@@ -39,36 +38,41 @@ public class TrafficService {
     return trafficConverter.entityToDto(trafficRepository.findAll());
   }
 
-  public Stream<Traffic> get_path(Long id) {
-    List<Traffic> traffic_list = new ArrayList<Traffic>();
-
-    trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(id))
-        .forEach(x -> traffic_list.add(x));
-
-    return traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
+  public TrafficDto getOne(Long id) {
+    return trafficConverter.entityToDto(trafficRepository.findById(id).get());
   }
 
-  public String get_status(Long id) {
-    List<Traffic> traffic_list = new ArrayList<Traffic>();
-    List<Mail> mail_list = new ArrayList<Mail>();
+  public List<TrafficDto> getPath(Long id) {
+    List<Traffic> trafficList = new ArrayList<Traffic>();
 
     trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(id))
-        .forEach(x -> traffic_list.add(x));
+        .sorted(Comparator.comparing(x -> x.getDate()))
+        .forEach(x -> trafficList.add(x));
+
+    return trafficConverter.entityToDto(trafficList);
+  }
+
+  public String getStatus(Long id) {
+    List<Traffic> trafficList = new ArrayList<Traffic>();
+    List<Mail> mailList = new ArrayList<Mail>();
+
+    trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(id))
+        .forEach(x -> trafficList.add(x));
 
     mailRepository.findAll().stream().filter(x -> x.getId().equals(id))
-        .forEach(x -> mail_list.add(x));
+        .forEach(x -> mailList.add(x));
 
-    if (traffic_list.isEmpty()) {
-      if (mail_list.isEmpty()) {
+    if (trafficList.isEmpty()) {
+      if (mailList.isEmpty()) {
         return "the parcel does not exist";
-      } else if (!mail_list.isEmpty()) {
+      } else {
         return "registered";
       }
     }
 
-    traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
+    trafficList.stream().sorted(Comparator.comparing(x -> x.getDate()));
 
-    if (traffic_list.get(traffic_list.size() - 1).getStatus()
+    if (trafficList.get(trafficList.size() - 1).getStatus()
         != TrafficOfficeStatusEnum.DELIVERED) {
       return "in transit";
     } else {
@@ -76,7 +80,8 @@ public class TrafficService {
     }
   }
 
-  public Object newtraff(final Traffic traffic) {
+  public String newTraffic(TrafficDto trafficDto) {
+    Traffic traffic = trafficConverter.dtoToEntity(trafficDto);
     List<Traffic> traffic_list = new ArrayList<Traffic>();
     boolean arrived_flag_null = false;
     boolean arrived_flag = false;
@@ -140,8 +145,8 @@ public class TrafficService {
     try {
       trafficRepository.save(traffic);
     } catch (Exception e) {
-      return e;
+      return "there is no post office";
     }
-    return new ResponseEntity<>(traffic, HttpStatus.OK);
+    return "new mail movement added";
   }
 }
