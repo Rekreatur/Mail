@@ -76,11 +76,11 @@ public class TrafficService implements TrafficServiceInter {
    * @return список передвижений
    */
   public List<TrafficDto> getPath(Long id) {
-    List<Traffic> trafficList = new ArrayList<Traffic>();
+    List<Traffic> trafficList = new ArrayList<>();
 
     trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(id))
-        .sorted(Comparator.comparing(x -> x.getDate()))
-        .forEach(x -> trafficList.add(x));
+        .sorted(Comparator.comparing(Traffic::getDate))
+        .forEach(trafficList::add);
 
     return trafficConverter.entityToDto(trafficList);
   }
@@ -96,10 +96,10 @@ public class TrafficService implements TrafficServiceInter {
     List<Mail> mailList = new ArrayList<>();
 
     trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(id))
-        .forEach(x -> trafficList.add(x));
+        .forEach(trafficList::add);
 
     mailRepository.findAll().stream().filter(x -> x.getId().equals(id))
-        .forEach(x -> mailList.add(x));
+        .forEach(mailList::add);
 
     if (trafficList.isEmpty()) {
       if (mailList.isEmpty()) {
@@ -109,7 +109,7 @@ public class TrafficService implements TrafficServiceInter {
       }
     }
 
-    trafficList.stream().sorted(Comparator.comparing(x -> x.getDate()));
+    trafficList.stream().sorted(Comparator.comparing(Traffic::getDate));
 
     if (!trafficList.get(trafficList.size() - 1).getStatus()
         .equals(TrafficOfficeStatusEnum.DELIVERED)
@@ -134,7 +134,7 @@ public class TrafficService implements TrafficServiceInter {
     Boolean trafficFirst = false;
 
     mailRepository.findAll().stream().filter(x -> x.getId().equals(trafficDto.getMail_id()))
-        .forEach(x -> mailList.add(x));
+        .forEach(mailList::add);
 
     if (mailList.isEmpty()) {
       return "The postal item does not exist";
@@ -142,21 +142,21 @@ public class TrafficService implements TrafficServiceInter {
 
     officeRepository.findAll().stream()
         .filter(x -> x.getId().equals(trafficDto.getPost_office_id()))
-        .forEach(x -> officeList.add(x));
+        .forEach(officeList::add);
 
     if (officeList.isEmpty()) {
       return "The office doesn't exist";
     }
 
     trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(trafficDto.getMail_id()))
-        .forEach(x -> trafficList.add(x));
+        .forEach(trafficList::add);
 
     if (trafficList.isEmpty()) {
       trafficFirst = true;
     }
 
     trafficList.stream().filter(x -> x.getStatus().equals(TrafficOfficeStatusEnum.DELIVERED))
-        .forEach(x -> trafficListWork.add(x));
+        .forEach(trafficListWork::add);
 
     if (!trafficListWork.isEmpty()) {
       return "the postal already delivered";
@@ -164,7 +164,7 @@ public class TrafficService implements TrafficServiceInter {
 
     trafficListWork.clear();
     trafficList.stream().filter(x -> x.getPost_office_id().equals(trafficDto.getPost_office_id()))
-        .forEach(x -> trafficListWork.add(x));
+        .forEach(trafficListWork::add);
 
     if ((trafficListWork.size() == 1) && (trafficDto.getStatus()
         .equals(TrafficOfficeStatusEnum.ARRIVED))) {
@@ -181,7 +181,7 @@ public class TrafficService implements TrafficServiceInter {
     }
 
     if ((!trafficFirst) && (trafficDto.getStatus().equals(TrafficOfficeStatusEnum.ARRIVED))) {
-      trafficList.stream().sorted(Comparator.comparing(x -> x.getDate()));
+      trafficList.stream().sorted(Comparator.comparing(Traffic::getDate));
       if (trafficList.get(trafficList.size() - 1).getStatus()
           .equals(TrafficOfficeStatusEnum.ARRIVED)) {
         return "the postal in another office";
