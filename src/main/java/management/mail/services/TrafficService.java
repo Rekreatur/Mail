@@ -111,8 +111,9 @@ public class TrafficService implements TrafficServiceInter {
 
     trafficList.stream().sorted(Comparator.comparing(x -> x.getDate()));
 
-    if (trafficList.get(trafficList.size() - 1).getStatus()
-        != TrafficOfficeStatusEnum.DELIVERED) {
+    if (!trafficList.get(trafficList.size() - 1).getStatus()
+        .equals(TrafficOfficeStatusEnum.DELIVERED)
+    ) {
       return "in transit";
     } else {
       return "delivered";
