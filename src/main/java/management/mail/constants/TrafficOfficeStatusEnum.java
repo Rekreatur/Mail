@@ -1,6 +1,6 @@
 package management.mail.constants;
 
-public enum OfficeStatusEnum {
+public enum TrafficOfficeStatusEnum {
     ARRIVED,
     DEPARTED,
     DELIVERED;

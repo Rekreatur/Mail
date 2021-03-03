@@ -1,11 +1,17 @@
 package management.mail.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import management.mail.constants.OfficeStatusEnum;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import lombok.Data;
+import management.mail.constants.TrafficOfficeStatusEnum;
 
 @Entity
 @Table
@@ -20,7 +26,7 @@ public class Traffic {
     private Long post_office_id;
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.ORDINAL)
-    private OfficeStatusEnum status;
+    private TrafficOfficeStatusEnum status;
     @Column(name = "date", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;

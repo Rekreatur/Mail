@@ -4,6 +4,7 @@ import java.util.List;
 import management.mail.converter.OfficeConverter;
 import management.mail.domain.Office;
 import management.mail.dto.OfficeDto;
+import management.mail.interservices.OfficeConverterInter;
 import management.mail.interservices.OfficeServiceInter;
 import management.mail.repo.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class OfficeService implements OfficeServiceInter {
    * Сервис для конвертации OfficeDto в Entity Office и Entity Office в OfficeDto
    */
   @Autowired
-  private OfficeConverter officeConverter;
+  private OfficeConverterInter officeConverter;
 
   /**
    * Метод получения списка всех почтовых отделений
