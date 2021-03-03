@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import management.mail.domain.Office;
 import management.mail.dto.OfficeDto;
-import management.mail.interservices.OfficeConverterInter;
+import management.mail.servicesinterface.OfficeConverterInterface;
 import management.mail.repo.OfficeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,12 +28,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @version 1.1
  */
 @ContextConfiguration(classes = {OfficeService.class, OfficeRepository.class,
-    OfficeConverterInter.class})
+    OfficeConverterInterface.class})
 @ExtendWith(SpringExtension.class)
 public class OfficeServiceTest {
 
   @MockBean
-  private OfficeConverterInter officeConverterInter;
+  private OfficeConverterInterface officeConverterInterface;
 
   @MockBean
   private OfficeRepository officeRepository;
@@ -44,19 +44,19 @@ public class OfficeServiceTest {
   @Test
   public void testFindAll() {
     ArrayList<OfficeDto> officeDtoList = new ArrayList<OfficeDto>();
-    when(this.officeConverterInter.entityToDto((List<Office>) any())).thenReturn(officeDtoList);
+    when(this.officeConverterInterface.entityToDto((List<Office>) any())).thenReturn(officeDtoList);
     when(this.officeRepository.findAll()).thenReturn(new ArrayList<Office>());
     List<OfficeDto> actualFindAllResult = this.officeService.findAll();
     assertSame(officeDtoList, actualFindAllResult);
     assertTrue(actualFindAllResult.isEmpty());
-    verify(this.officeConverterInter).entityToDto((List<Office>) any());
+    verify(this.officeConverterInterface).entityToDto((List<Office>) any());
     verify(this.officeRepository).findAll();
   }
 
   @Test
   public void testGetOne() {
     OfficeDto officeDto = new OfficeDto();
-    when(this.officeConverterInter.entityToDto((Office) any())).thenReturn(officeDto);
+    when(this.officeConverterInterface.entityToDto((Office) any())).thenReturn(officeDto);
 
     Office office = new Office();
     office.setId(123L);
@@ -66,7 +66,7 @@ public class OfficeServiceTest {
     Optional<Office> ofResult = Optional.<Office>of(office);
     when(this.officeRepository.findById((Long) any())).thenReturn(ofResult);
     assertSame(officeDto, this.officeService.getOne(123L));
-    verify(this.officeConverterInter).entityToDto((Office) any());
+    verify(this.officeConverterInterface).entityToDto((Office) any());
     verify(this.officeRepository).findById((Long) any());
   }
 
@@ -86,11 +86,11 @@ public class OfficeServiceTest {
     office1.setIndex("Index");
     office1.setAddress("42 Main St");
     OfficeDto officeDto = new OfficeDto();
-    when(this.officeConverterInter.entityToDto((Office) any())).thenReturn(officeDto);
-    when(this.officeConverterInter.dtoToEntity((OfficeDto) any())).thenReturn(office1);
+    when(this.officeConverterInterface.entityToDto((Office) any())).thenReturn(officeDto);
+    when(this.officeConverterInterface.dtoToEntity((OfficeDto) any())).thenReturn(office1);
     assertSame(officeDto, this.officeService.newOffice(new OfficeDto()));
-    verify(this.officeConverterInter).entityToDto((Office) any());
-    verify(this.officeConverterInter).dtoToEntity((OfficeDto) any());
+    verify(this.officeConverterInterface).entityToDto((Office) any());
+    verify(this.officeConverterInterface).dtoToEntity((OfficeDto) any());
     verify(this.officeRepository).saveAndFlush((Office) any());
   }
 
@@ -102,8 +102,8 @@ public class OfficeServiceTest {
     office.setIndex("Index");
     office.setAddress("42 Main St");
     OfficeDto officeDto = new OfficeDto();
-    when(this.officeConverterInter.entityToDto((Office) any())).thenReturn(officeDto);
-    when(this.officeConverterInter.dtoToEntityEdit((OfficeDto) any(), (Office) any()))
+    when(this.officeConverterInterface.entityToDto((Office) any())).thenReturn(officeDto);
+    when(this.officeConverterInterface.dtoToEntityEdit((OfficeDto) any(), (Office) any()))
         .thenReturn(office);
 
     Office office1 = new Office();
@@ -121,8 +121,8 @@ public class OfficeServiceTest {
     when(this.officeRepository.saveAndFlush((Office) any())).thenReturn(office2);
     when(this.officeRepository.findById((Long) any())).thenReturn(ofResult);
     assertSame(officeDto, this.officeService.edit(123L, new OfficeDto()));
-    verify(this.officeConverterInter).entityToDto((Office) any());
-    verify(this.officeConverterInter).dtoToEntityEdit((OfficeDto) any(), (Office) any());
+    verify(this.officeConverterInterface).entityToDto((Office) any());
+    verify(this.officeConverterInterface).dtoToEntityEdit((OfficeDto) any(), (Office) any());
     verify(this.officeRepository).findById((Long) any());
     verify(this.officeRepository).saveAndFlush((Office) any());
   }

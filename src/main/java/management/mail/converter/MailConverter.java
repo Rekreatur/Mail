@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import management.mail.domain.Mail;
 import management.mail.dto.MailDto;
-import management.mail.interservices.MailConverterInter;
+import management.mail.servicesinterface.MailConverterInterface;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @version 1.1
  */
 @Service
-public class MailConverter implements MailConverterInter {
+public class MailConverter implements MailConverterInterface {
 
   /**
    * Метод конвертации Entity Mail в MailDto

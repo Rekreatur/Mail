@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import management.mail.domain.Office;
 import management.mail.dto.OfficeDto;
-import management.mail.interservices.OfficeConverterInter;
+import management.mail.servicesinterface.OfficeConverterInterface;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @version 1.1
  */
 @Service
-public class OfficeConverter implements OfficeConverterInter {
+public class OfficeConverter implements OfficeConverterInterface {
 
   /**
    * Метод конвертации Entity Office в OfficeDto

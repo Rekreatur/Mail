@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import management.mail.dto.MailDto;
-import management.mail.interservices.MailServiceInter;
+import management.mail.servicesinterface.MailServiceInterface;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,11 +35,11 @@ public class MailControllerTest {
   private MailController mailController;
 
   @MockBean
-  private MailServiceInter mailServiceInter;
+  private MailServiceInterface mailServiceInterface;
 
   @Test
   public void testFindAll() throws Exception {
-    when(this.mailServiceInter.findAll()).thenReturn(new ArrayList<MailDto>());
+    when(this.mailServiceInterface.findAll()).thenReturn(new ArrayList<MailDto>());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/mails");
     MockMvcBuilders.standaloneSetup(this.mailController)
         .build()
@@ -52,7 +52,7 @@ public class MailControllerTest {
 
   @Test
   public void testGetOne() throws Exception {
-    when(this.mailServiceInter.getOne((Long) any())).thenReturn(new MailDto());
+    when(this.mailServiceInterface.getOne((Long) any())).thenReturn(new MailDto());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/mail/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.mailController)
         .build()
@@ -68,7 +68,7 @@ public class MailControllerTest {
 
   @Test
   public void testRegistration() throws Exception {
-    when(this.mailServiceInter.registration((MailDto) any())).thenReturn(new MailDto());
+    when(this.mailServiceInterface.registration((MailDto) any())).thenReturn(new MailDto());
     MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders.post("/registration")
         .contentType(MediaType.APPLICATION_JSON);
 
@@ -88,7 +88,7 @@ public class MailControllerTest {
 
   @Test
   public void testEdit() throws Exception {
-    when(this.mailServiceInter.edit((Long) any(), (MailDto) any())).thenReturn(new MailDto());
+    when(this.mailServiceInterface.edit((Long) any(), (MailDto) any())).thenReturn(new MailDto());
     MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders.put("/edit/{id}", 1L)
         .contentType(MediaType.APPLICATION_JSON);
 
@@ -108,7 +108,7 @@ public class MailControllerTest {
 
   @Test
   public void testDelete() throws Exception {
-    doNothing().when(this.mailServiceInter).delete((Long) any());
+    doNothing().when(this.mailServiceInterface).delete((Long) any());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
         .delete("/delete/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.mailController)

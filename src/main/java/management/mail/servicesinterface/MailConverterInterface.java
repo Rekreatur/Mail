@@ -1,4 +1,4 @@
-package management.mail.interservices;
+package management.mail.servicesinterface;
 
 import java.util.List;
 import management.mail.domain.Mail;
@@ -10,7 +10,7 @@ import management.mail.dto.MailDto;
  * @author Байрамов Искандер
  * @version 1.1
  */
-public interface MailConverterInter {
+public interface MailConverterInterface {
 
   /**
    * Метод конвертации Entity Mail в MailDto

@@ -3,7 +3,7 @@ package management.mail.controllers;
 import java.util.List;
 import management.mail.constants.OfficeMapConstant;
 import management.mail.dto.OfficeDto;
-import management.mail.interservices.OfficeServiceInter;
+import management.mail.servicesinterface.OfficeServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +26,7 @@ public class OfficeController {
    * Сервис, содержащий методы для работы с почтовыми отделениями
    */
   @Autowired
-  private OfficeServiceInter officeService;
+  private OfficeServiceInterface officeService;
 
   /**
    * Метод получения списка всех почтовых отделений

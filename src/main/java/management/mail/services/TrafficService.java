@@ -9,8 +9,8 @@ import management.mail.domain.Mail;
 import management.mail.domain.Office;
 import management.mail.domain.Traffic;
 import management.mail.dto.TrafficDto;
-import management.mail.interservices.TrafficConverterInter;
-import management.mail.interservices.TrafficServiceInter;
+import management.mail.servicesinterface.TrafficConverterInterface;
+import management.mail.servicesinterface.TrafficServiceInterface;
 import management.mail.repo.MailRepository;
 import management.mail.repo.OfficeRepository;
 import management.mail.repo.TrafficRepository;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
  * @version 1.1
  */
 @Service
-public class TrafficService implements TrafficServiceInter {
+public class TrafficService implements TrafficServiceInterface {
 
   /**
    * Репозиторий для работы с Entity Traffic
@@ -48,7 +48,7 @@ public class TrafficService implements TrafficServiceInter {
    * Сервис для конвертации TrafficDto в Entity Traffic и Entity Traffic в TrafficDto
    */
   @Autowired
-  private TrafficConverterInter trafficConverter;
+  private TrafficConverterInterface trafficConverter;
 
   /**
    * Метод получения списка всех передвижений всех почтовых отправлений

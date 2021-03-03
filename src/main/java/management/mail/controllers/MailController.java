@@ -3,7 +3,7 @@ package management.mail.controllers;
 import java.util.List;
 import management.mail.constants.MailMapConstant;
 import management.mail.dto.MailDto;
-import management.mail.interservices.MailServiceInter;
+import management.mail.servicesinterface.MailServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +26,7 @@ public class MailController {
    * Сервис, содержащий методы обработки почтовых отправлений
    */
   @Autowired
-  private MailServiceInter mailService;
+  private MailServiceInterface mailService;
 
   /**
    * Метод получения списка всех зарегистрированных почтовых отправлений

@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import management.mail.dto.OfficeDto;
-import management.mail.interservices.OfficeServiceInter;
+import management.mail.servicesinterface.OfficeServiceInterface;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,11 +35,11 @@ public class OfficeControllerTest {
   private OfficeController officeController;
 
   @MockBean
-  private OfficeServiceInter officeServiceInter;
+  private OfficeServiceInterface officeServiceInterface;
 
   @Test
   public void testFindAll() throws Exception {
-    when(this.officeServiceInter.findAll()).thenReturn(new ArrayList<OfficeDto>());
+    when(this.officeServiceInterface.findAll()).thenReturn(new ArrayList<OfficeDto>());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/offices");
     MockMvcBuilders.standaloneSetup(this.officeController)
         .build()
@@ -52,7 +52,7 @@ public class OfficeControllerTest {
 
   @Test
   public void testGetOne() throws Exception {
-    when(this.officeServiceInter.getOne((Long) any())).thenReturn(new OfficeDto());
+    when(this.officeServiceInterface.getOne((Long) any())).thenReturn(new OfficeDto());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/office/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.officeController)
         .build()
@@ -67,7 +67,7 @@ public class OfficeControllerTest {
 
   @Test
   public void testNewOffice() throws Exception {
-    when(this.officeServiceInter.newOffice((OfficeDto) any())).thenReturn(new OfficeDto());
+    when(this.officeServiceInterface.newOffice((OfficeDto) any())).thenReturn(new OfficeDto());
     MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders.post("/newoffice")
         .contentType(MediaType.APPLICATION_JSON);
 
@@ -86,7 +86,7 @@ public class OfficeControllerTest {
 
   @Test
   public void testEdit() throws Exception {
-    when(this.officeServiceInter.edit((Long) any(), (OfficeDto) any())).thenReturn(new OfficeDto());
+    when(this.officeServiceInterface.edit((Long) any(), (OfficeDto) any())).thenReturn(new OfficeDto());
     MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders
         .put("/editoffice/{id}", 1L)
         .contentType(MediaType.APPLICATION_JSON);
@@ -106,7 +106,7 @@ public class OfficeControllerTest {
 
   @Test
   public void testDelete() throws Exception {
-    doNothing().when(this.officeServiceInter).delete((Long) any());
+    doNothing().when(this.officeServiceInterface).delete((Long) any());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
         .delete("/deleteoffice/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.officeController)

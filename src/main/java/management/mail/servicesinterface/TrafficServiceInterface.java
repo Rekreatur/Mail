@@ -1,4 +1,4 @@
-package management.mail.interservices;
+package management.mail.servicesinterface;
 
 import java.util.List;
 import management.mail.dto.TrafficDto;
@@ -9,7 +9,7 @@ import management.mail.dto.TrafficDto;
  * @author Байрамов Искандер
  * @version 1.1
  */
-public interface TrafficServiceInter {
+public interface TrafficServiceInterface {
 
   /**
    * Метод получения списка всех передвижений всех почтовых отправлений

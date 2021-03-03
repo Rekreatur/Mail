@@ -3,7 +3,7 @@ package management.mail.controllers;
 import java.util.List;
 import management.mail.constants.TrafficMapConstant;
 import management.mail.dto.TrafficDto;
-import management.mail.interservices.TrafficServiceInter;
+import management.mail.servicesinterface.TrafficServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +24,7 @@ public class TrafficController {
    * Сервис, содержащий методы для работы с передвижениями почтовых отправлений
    */
   @Autowired
-  private TrafficServiceInter trafficService;
+  private TrafficServiceInterface trafficService;
 
   /**
    * Метод получения списка всех передвижений всех почтовых отправлений

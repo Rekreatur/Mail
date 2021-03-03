@@ -15,7 +15,7 @@ import management.mail.constants.TrafficOfficeStatusEnum;
 import management.mail.domain.Mail;
 import management.mail.domain.Traffic;
 import management.mail.dto.TrafficDto;
-import management.mail.interservices.TrafficConverterInter;
+import management.mail.servicesinterface.TrafficConverterInterface;
 import management.mail.repo.MailRepository;
 import management.mail.repo.OfficeRepository;
 import management.mail.repo.TrafficRepository;
@@ -34,7 +34,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  */
 @ContextConfiguration(classes = {MailRepository.class, OfficeRepository.class,
     TrafficRepository.class,
-    TrafficConverterInter.class, TrafficService.class})
+    TrafficConverterInterface.class, TrafficService.class})
 @ExtendWith(SpringExtension.class)
 public class TrafficServiceTest {
 
@@ -45,7 +45,7 @@ public class TrafficServiceTest {
   private OfficeRepository officeRepository;
 
   @MockBean
-  private TrafficConverterInter trafficConverterInter;
+  private TrafficConverterInterface trafficConverterInterface;
 
   @MockBean
   private TrafficRepository trafficRepository;
@@ -56,19 +56,19 @@ public class TrafficServiceTest {
   @Test
   public void testFindAll() {
     ArrayList<TrafficDto> trafficDtoList = new ArrayList<TrafficDto>();
-    when(this.trafficConverterInter.entityToDto((List<Traffic>) any())).thenReturn(trafficDtoList);
+    when(this.trafficConverterInterface.entityToDto((List<Traffic>) any())).thenReturn(trafficDtoList);
     when(this.trafficRepository.findAll()).thenReturn(new ArrayList<Traffic>());
     List<TrafficDto> actualFindAllResult = this.trafficService.findAll();
     assertSame(trafficDtoList, actualFindAllResult);
     assertTrue(actualFindAllResult.isEmpty());
-    verify(this.trafficConverterInter).entityToDto((List<Traffic>) any());
+    verify(this.trafficConverterInterface).entityToDto((List<Traffic>) any());
     verify(this.trafficRepository).findAll();
   }
 
   @Test
   public void testGetOne() {
     TrafficDto trafficDto = new TrafficDto();
-    when(this.trafficConverterInter.entityToDto((Traffic) any())).thenReturn(trafficDto);
+    when(this.trafficConverterInterface.entityToDto((Traffic) any())).thenReturn(trafficDto);
 
     Traffic traffic = new Traffic();
     traffic.setPost_office_id(1L);
@@ -79,7 +79,7 @@ public class TrafficServiceTest {
     Optional<Traffic> ofResult = Optional.<Traffic>of(traffic);
     when(this.trafficRepository.findById((Long) any())).thenReturn(ofResult);
     assertSame(trafficDto, this.trafficService.getOne(123L));
-    verify(this.trafficConverterInter).entityToDto((Traffic) any());
+    verify(this.trafficConverterInterface).entityToDto((Traffic) any());
     verify(this.trafficRepository).findById((Long) any());
   }
 
@@ -87,12 +87,12 @@ public class TrafficServiceTest {
   @Test
   public void testGetPath() {
     ArrayList<TrafficDto> trafficDtoList = new ArrayList<TrafficDto>();
-    when(this.trafficConverterInter.entityToDto((List<Traffic>) any())).thenReturn(trafficDtoList);
+    when(this.trafficConverterInterface.entityToDto((List<Traffic>) any())).thenReturn(trafficDtoList);
     when(this.trafficRepository.findAll()).thenReturn(new ArrayList<Traffic>());
     List<TrafficDto> actualPath = this.trafficService.getPath(123L);
     assertSame(trafficDtoList, actualPath);
     assertTrue(actualPath.isEmpty());
-    verify(this.trafficConverterInter).entityToDto((List<Traffic>) any());
+    verify(this.trafficConverterInterface).entityToDto((List<Traffic>) any());
     verify(this.trafficRepository).findAll();
   }
 

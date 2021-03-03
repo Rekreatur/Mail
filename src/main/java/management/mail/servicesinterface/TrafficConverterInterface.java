@@ -1,4 +1,4 @@
-package management.mail.interservices;
+package management.mail.servicesinterface;
 
 import java.util.List;
 import management.mail.domain.Traffic;
@@ -10,7 +10,7 @@ import management.mail.dto.TrafficDto;
  * @author Байрамов Искандер
  * @version 1.1
  */
-public interface TrafficConverterInter {
+public interface TrafficConverterInterface {
 
   /**
    * Метод конвертации Entity Traffic в TrafficDto

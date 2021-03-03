@@ -1,4 +1,4 @@
-package management.mail.interservices;
+package management.mail.servicesinterface;
 
 import java.util.List;
 import management.mail.dto.OfficeDto;
@@ -10,7 +10,7 @@ import management.mail.dto.OfficeDto;
  * @version 1.1
  */
 
-public interface OfficeServiceInter {
+public interface OfficeServiceInterface {
 
   /**
    * Метод получения списка всех почтовых отделений

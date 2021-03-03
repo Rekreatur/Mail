@@ -1,4 +1,4 @@
-package management.mail.interservices;
+package management.mail.servicesinterface;
 
 import java.util.List;
 import management.mail.domain.Office;
@@ -10,7 +10,7 @@ import management.mail.dto.OfficeDto;
  * @author Байрамов Искандер
  * @version 1.1
  */
-public interface OfficeConverterInter {
+public interface OfficeConverterInterface {
 
   /**
    * Метод конвертации Entity Office в OfficeDto

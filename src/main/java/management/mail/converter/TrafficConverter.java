@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import management.mail.domain.Traffic;
 import management.mail.dto.TrafficDto;
-import management.mail.interservices.TrafficConverterInter;
+import management.mail.servicesinterface.TrafficConverterInterface;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @version 1.1
  */
 @Service
-public class TrafficConverter implements TrafficConverterInter {
+public class TrafficConverter implements TrafficConverterInterface {
 
   /**
    * Метод конвертации Entity Traffic в TrafficDto

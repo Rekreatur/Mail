@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import management.mail.dto.TrafficDto;
-import management.mail.interservices.TrafficServiceInter;
+import management.mail.servicesinterface.TrafficServiceInterface;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,11 +34,11 @@ public class TrafficControllerTest {
   private TrafficController trafficController;
 
   @MockBean
-  private TrafficServiceInter trafficServiceInter;
+  private TrafficServiceInterface trafficServiceInterface;
 
   @Test
   public void testFindAll() throws Exception {
-    when(this.trafficServiceInter.findAll()).thenReturn(new ArrayList<TrafficDto>());
+    when(this.trafficServiceInterface.findAll()).thenReturn(new ArrayList<TrafficDto>());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/traffic");
     MockMvcBuilders.standaloneSetup(this.trafficController)
         .build()
@@ -50,7 +50,7 @@ public class TrafficControllerTest {
 
   @Test
   public void testGetOne() throws Exception {
-    when(this.trafficServiceInter.getOne((Long) any())).thenReturn(new TrafficDto());
+    when(this.trafficServiceInterface.getOne((Long) any())).thenReturn(new TrafficDto());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/traffic/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.trafficController)
         .build()
@@ -65,7 +65,7 @@ public class TrafficControllerTest {
 
   @Test
   public void testGetPath() throws Exception {
-    when(this.trafficServiceInter.getPath((Long) any())).thenReturn(new ArrayList<TrafficDto>());
+    when(this.trafficServiceInterface.getPath((Long) any())).thenReturn(new ArrayList<TrafficDto>());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fullpath/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.trafficController)
         .build()
@@ -78,7 +78,7 @@ public class TrafficControllerTest {
 
   @Test
   public void testGetStatus() throws Exception {
-    when(this.trafficServiceInter.getStatus((Long) any())).thenReturn("foo");
+    when(this.trafficServiceInterface.getStatus((Long) any())).thenReturn("foo");
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/status/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.trafficController)
         .build()
@@ -91,7 +91,7 @@ public class TrafficControllerTest {
 
   @Test
   public void testNewTraffic() throws Exception {
-    when(this.trafficServiceInter.newTraffic((TrafficDto) any())).thenReturn("foo");
+    when(this.trafficServiceInterface.newTraffic((TrafficDto) any())).thenReturn("foo");
     MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders.post("/newtraffic")
         .contentType(MediaType.APPLICATION_JSON);
 

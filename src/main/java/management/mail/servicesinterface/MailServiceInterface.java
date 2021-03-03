@@ -1,4 +1,4 @@
-package management.mail.interservices;
+package management.mail.servicesinterface;
 
 import management.mail.dto.MailDto;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * @author Байрамов Искандер
  * @version 1.1
  */
-public interface MailServiceInter {
+public interface MailServiceInterface {
 
   /**
    * Метод получения списка всех зарегистрированных почтовых отправлений

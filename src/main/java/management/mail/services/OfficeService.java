@@ -3,8 +3,8 @@ package management.mail.services;
 import java.util.List;
 import management.mail.domain.Office;
 import management.mail.dto.OfficeDto;
-import management.mail.interservices.OfficeConverterInter;
-import management.mail.interservices.OfficeServiceInter;
+import management.mail.servicesinterface.OfficeConverterInterface;
+import management.mail.servicesinterface.OfficeServiceInterface;
 import management.mail.repo.OfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class OfficeService implements OfficeServiceInter {
+public class OfficeService implements OfficeServiceInterface {
 
   /**
    * Репозиторий для работы с Entity Office
@@ -29,7 +29,7 @@ public class OfficeService implements OfficeServiceInter {
    * Сервис для конвертации OfficeDto в Entity Office и Entity Office в OfficeDto
    */
   @Autowired
-  private OfficeConverterInter officeConverter;
+  private OfficeConverterInterface officeConverter;
 
   /**
    * Метод получения списка всех почтовых отделений
