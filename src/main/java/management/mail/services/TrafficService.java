@@ -10,6 +10,7 @@ import management.mail.domain.Office;
 import management.mail.domain.Traffic;
 import management.mail.dto.TrafficDto;
 import management.mail.interservices.TrafficConverterInter;
+import management.mail.interservices.TrafficServiceInter;
 import management.mail.repo.MailRepository;
 import management.mail.repo.OfficeRepository;
 import management.mail.repo.TrafficRepository;
@@ -17,34 +18,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Сервис для работы с почтовыми отправлениями
+ * Сервис для работы с передвижениями почтовых отправлений
  *
  * @author Байрамов Искандер
  * @version 1.1
  */
 @Service
-public class TrafficService {
+public class TrafficService implements TrafficServiceInter {
 
+  /**
+   * Репозиторий для работы с Entity Traffic
+   */
   @Autowired
   private TrafficRepository trafficRepository;
 
+  /**
+   * Репозиторий для работы с Entity Mail
+   */
   @Autowired
   private MailRepository mailRepository;
 
+  /**
+   * Репозиторий для работы с Entity Office
+   */
   @Autowired
   OfficeRepository officeRepository;
 
+  /**
+   * Сервис для конвертации TrafficDto в Entity Traffic и Entity Traffic в TrafficDto
+   */
   @Autowired
   private TrafficConverterInter trafficConverter;
 
+  /**
+   * Метод получения списка всех передвижений всех почтовых отправлений
+   *
+   * @return список передвижений почтовых отправлений
+   */
   public List<TrafficDto> findAll() {
     return trafficConverter.entityToDto(trafficRepository.findAll());
   }
 
+  /**
+   * Метод получения конкретного передвижения почтового отправления
+   *
+   * @param id это параметр, задающий id необходимого передвижения
+   * @return передвижение почтового отправления
+   */
   public TrafficDto getOne(Long id) {
     return trafficConverter.entityToDto(trafficRepository.findById(id).get());
   }
 
+  /**
+   * Метод получения полного пути передвижения конкретного почтового отправления
+   *
+   * @param id это параметр, задающий id необходимого почтового отправления
+   * @return список передвижений
+   */
   public List<TrafficDto> getPath(Long id) {
     List<Traffic> trafficList = new ArrayList<Traffic>();
 
@@ -55,6 +85,12 @@ public class TrafficService {
     return trafficConverter.entityToDto(trafficList);
   }
 
+  /**
+   * Метод получения статуса почтового отправления
+   *
+   * @param id это параметр, задающий id необходимого почтового отправления
+   * @return статус почтового отправления
+   */
   public String getStatus(Long id) {
     List<Traffic> trafficList = new ArrayList<>();
     List<Mail> mailList = new ArrayList<>();
@@ -83,6 +119,12 @@ public class TrafficService {
     }
   }
 
+  /**
+   * Метод регистрации передвижения почтового отправления
+   *
+   * @param trafficDto это параметр, задающий информацию о передвижении
+   * @return информация о том, удалось ли зарегистрировать передвижение
+   */
   public String newTraffic(TrafficDto trafficDto) {
     List<Mail> mailList = new ArrayList<>();
     List<Office> officeList = new ArrayList<>();
@@ -92,6 +134,7 @@ public class TrafficService {
 
     mailRepository.findAll().stream().filter(x -> x.getId().equals(trafficDto.getMail_id()))
         .forEach(x -> mailList.add(x));
+
     if (mailList.isEmpty()) {
       return "The postal item does not exist";
     }
@@ -99,17 +142,21 @@ public class TrafficService {
     officeRepository.findAll().stream()
         .filter(x -> x.getId().equals(trafficDto.getPost_office_id()))
         .forEach(x -> officeList.add(x));
+
     if (officeList.isEmpty()) {
       return "The office doesn't exist";
     }
 
     trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(trafficDto.getMail_id()))
         .forEach(x -> trafficList.add(x));
+
     if (trafficList.isEmpty()) {
       trafficFirst = true;
     }
+
     trafficList.stream().filter(x -> x.getStatus().equals(TrafficOfficeStatusEnum.DELIVERED))
         .forEach(x -> trafficListWork.add(x));
+
     if (!trafficListWork.isEmpty()) {
       return "the postal already delivered";
     }
