@@ -1,9 +1,9 @@
 package management.mail.services;
 
 import java.util.List;
-import management.mail.converter.MailConverter;
 import management.mail.domain.Mail;
 import management.mail.dto.MailDto;
+import management.mail.interservices.MailConverterInter;
 import management.mail.interservices.MailServiceInter;
 import management.mail.repo.MailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class MailService implements MailServiceInter {
    * Сервис для конвертации MailDto в Entity Mail и Entity Mail в MailDto
    */
   @Autowired
-  MailConverter mailConverter;
+  MailConverterInter mailConverter;
 
   /**
    * Метод получения списка всех зарегистрированных почтовых отправлений
