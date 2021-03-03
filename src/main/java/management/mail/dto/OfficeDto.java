@@ -9,7 +9,7 @@ import lombok.Data;
  * @version 1.1
  */
 @Data
-public class OfficeDto {
+public final class OfficeDto {
 
   /**
    * Поле со значением id
