@@ -58,7 +58,7 @@ public class OfficeService implements OfficeServiceInter {
    */
   public OfficeDto newOffice(OfficeDto officeDto) {
     Office office = officeConverter.dtoToEntity(officeDto);
-    return officeConverter.entityToDto(officeRepository.save(office));
+    return officeConverter.entityToDto(officeRepository.saveAndFlush(office));
   }
 
   /**

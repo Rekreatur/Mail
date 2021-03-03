@@ -57,7 +57,7 @@ public class MailService implements MailServiceInter {
    */
   public MailDto registration(MailDto mailDto) {
     Mail mail = mailConverter.dtoToEntity(mailDto);
-    return mailConverter.entityToDto(mailRepository.save(mail));
+    return mailConverter.entityToDto(mailRepository.saveAndFlush(mail));
   }
 
   /**

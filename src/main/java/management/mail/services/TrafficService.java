@@ -6,14 +6,14 @@ import java.util.Comparator;
 import java.util.List;
 import management.mail.constants.TrafficOfficeStatusEnum;
 import management.mail.domain.Mail;
+import management.mail.domain.Office;
 import management.mail.domain.Traffic;
 import management.mail.dto.TrafficDto;
 import management.mail.interservices.TrafficConverterInter;
 import management.mail.repo.MailRepository;
+import management.mail.repo.OfficeRepository;
 import management.mail.repo.TrafficRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,6 +30,9 @@ public class TrafficService {
 
   @Autowired
   private MailRepository mailRepository;
+
+  @Autowired
+  OfficeRepository officeRepository;
 
   @Autowired
   private TrafficConverterInter trafficConverter;
@@ -53,8 +56,8 @@ public class TrafficService {
   }
 
   public String getStatus(Long id) {
-    List<Traffic> trafficList = new ArrayList<Traffic>();
-    List<Mail> mailList = new ArrayList<Mail>();
+    List<Traffic> trafficList = new ArrayList<>();
+    List<Mail> mailList = new ArrayList<>();
 
     trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(id))
         .forEach(x -> trafficList.add(x));
@@ -81,72 +84,66 @@ public class TrafficService {
   }
 
   public String newTraffic(TrafficDto trafficDto) {
-    Traffic traffic = trafficConverter.dtoToEntity(trafficDto);
-    List<Traffic> traffic_list = new ArrayList<Traffic>();
-    boolean arrived_flag_null = false;
-    boolean arrived_flag = false;
+    List<Mail> mailList = new ArrayList<>();
+    List<Office> officeList = new ArrayList<>();
+    List<Traffic> trafficList = new ArrayList<>();
+    List<Traffic> trafficListWork = new ArrayList<>();
+    Boolean trafficFirst = false;
 
-    for (Traffic t : trafficRepository.findAll()) {
-      if (t.getMail_id() == traffic.getMail_id()) {
-        arrived_flag_null = true;
-        traffic_list.add(t);
+    mailRepository.findAll().stream().filter(x -> x.getId().equals(trafficDto.getMail_id()))
+        .forEach(x -> mailList.add(x));
+    if (mailList.isEmpty()) {
+      return "The postal item does not exist";
+    }
 
-        if (t.getStatus() == TrafficOfficeStatusEnum.DELIVERED) {
-          return "already delivered";
-        }
+    officeRepository.findAll().stream()
+        .filter(x -> x.getId().equals(trafficDto.getPost_office_id()))
+        .forEach(x -> officeList.add(x));
+    if (officeList.isEmpty()) {
+      return "The office doesn't exist";
+    }
 
-        if ((t.getPost_office_id() == traffic.getPost_office_id()) &&
-            (t.getStatus() == TrafficOfficeStatusEnum.DEPARTED) &&
-            (traffic.getStatus() != TrafficOfficeStatusEnum.ARRIVED)) {
-          return "the package has already been sent";
-        }
+    trafficRepository.findAll().stream().filter(x -> x.getMail_id().equals(trafficDto.getMail_id()))
+        .forEach(x -> trafficList.add(x));
+    if (trafficList.isEmpty()) {
+      trafficFirst = true;
+    }
+    trafficList.stream().filter(x -> x.getStatus().equals(TrafficOfficeStatusEnum.DELIVERED))
+        .forEach(x -> trafficListWork.add(x));
+    if (!trafficListWork.isEmpty()) {
+      return "the postal already delivered";
+    }
 
-        if (t.getPost_office_id() == traffic.getPost_office_id()) {
-          if ((t.getStatus() == TrafficOfficeStatusEnum.ARRIVED) && (traffic.getStatus()
-              == TrafficOfficeStatusEnum.ARRIVED)) {
-            return "the parcel is already in the post office";
-          }
-        }
+    trafficListWork.clear();
+    trafficList.stream().filter(x -> x.getPost_office_id().equals(trafficDto.getPost_office_id()))
+        .forEach(x -> trafficListWork.add(x));
 
-        if ((t.getPost_office_id() == traffic.getPost_office_id()) &&
-            (t.getStatus() == TrafficOfficeStatusEnum.ARRIVED)) {
-          arrived_flag = true;
-        }
+    if ((trafficListWork.size() == 1) && (trafficDto.getStatus()
+        .equals(TrafficOfficeStatusEnum.ARRIVED))) {
+      return "the postal is already in the office";
+    }
+
+    if (trafficListWork.size() == 2) {
+      return "the postal has already left the office";
+    }
+
+    if ((trafficListWork.isEmpty()) && (!(trafficDto.getStatus()
+        .equals(TrafficOfficeStatusEnum.ARRIVED)))) {
+      return "the postal is not in the office";
+    }
+
+    if ((!trafficFirst) && (trafficDto.getStatus().equals(TrafficOfficeStatusEnum.ARRIVED))) {
+      trafficList.stream().sorted(Comparator.comparing(x -> x.getDate()));
+      if (trafficList.get(trafficList.size() - 1).getStatus()
+          .equals(TrafficOfficeStatusEnum.ARRIVED)) {
+        return "the postal in another office";
       }
     }
 
-    traffic_list.stream().sorted(Comparator.comparing(x -> x.getDate()));
+    trafficDto.setDate(LocalDateTime.now());
 
-    if (!traffic_list.isEmpty()) {
-      if (traffic.getStatus() == TrafficOfficeStatusEnum.ARRIVED) {
-        if (traffic_list.get(traffic_list.size() - 1).getStatus()
-            != TrafficOfficeStatusEnum.DEPARTED) {
-          return "The parcel is located in another post office";
-        }
-      }
-    } else if (traffic.getStatus() != TrafficOfficeStatusEnum.ARRIVED) {
-      return "The parcel is located in another post office";
-    }
+    trafficRepository.saveAndFlush(trafficConverter.dtoToEntity(trafficDto));
 
-    if (!arrived_flag_null) {
-      if (traffic.getStatus() != TrafficOfficeStatusEnum.ARRIVED) {
-        return "the parcel is not in the post office";
-      }
-    }
-
-    if (traffic.getStatus() != TrafficOfficeStatusEnum.ARRIVED) {
-      if (!arrived_flag) {
-        return "the parcel is not in the post office";
-      }
-    }
-
-    traffic.setDate(LocalDateTime.now());
-
-    try {
-      trafficRepository.save(traffic);
-    } catch (Exception e) {
-      return "there is no post office";
-    }
     return "new mail movement added";
   }
 }
