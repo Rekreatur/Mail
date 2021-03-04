@@ -15,10 +15,10 @@ import management.mail.constants.TrafficOfficeStatusEnum;
 import management.mail.domain.Mail;
 import management.mail.domain.Traffic;
 import management.mail.dto.TrafficDto;
-import management.mail.servicesinterface.TrafficConverterInterface;
 import management.mail.repo.MailRepository;
 import management.mail.repo.OfficeRepository;
 import management.mail.repo.TrafficRepository;
+import management.mail.servicesinterface.TrafficConverterInterface;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +53,14 @@ public class TrafficServiceTest {
   @Autowired
   private TrafficService trafficService;
 
+  /**
+   * Тест метода findAll
+   */
   @Test
   public void testFindAll() {
     ArrayList<TrafficDto> trafficDtoList = new ArrayList<TrafficDto>();
-    when(this.trafficConverterInterface.entityToDto((List<Traffic>) any())).thenReturn(trafficDtoList);
+    when(this.trafficConverterInterface.entityToDto((List<Traffic>) any()))
+        .thenReturn(trafficDtoList);
     when(this.trafficRepository.findAll()).thenReturn(new ArrayList<Traffic>());
     List<TrafficDto> actualFindAllResult = this.trafficService.findAll();
     assertSame(trafficDtoList, actualFindAllResult);
@@ -65,6 +69,9 @@ public class TrafficServiceTest {
     verify(this.trafficRepository).findAll();
   }
 
+  /**
+   * Тест метода getOne
+   */
   @Test
   public void testGetOne() {
     TrafficDto trafficDto = new TrafficDto();
@@ -83,11 +90,14 @@ public class TrafficServiceTest {
     verify(this.trafficRepository).findById((Long) any());
   }
 
-
+  /**
+   * Тест метода getPath
+   */
   @Test
   public void testGetPath() {
     ArrayList<TrafficDto> trafficDtoList = new ArrayList<TrafficDto>();
-    when(this.trafficConverterInterface.entityToDto((List<Traffic>) any())).thenReturn(trafficDtoList);
+    when(this.trafficConverterInterface.entityToDto((List<Traffic>) any()))
+        .thenReturn(trafficDtoList);
     when(this.trafficRepository.findAll()).thenReturn(new ArrayList<Traffic>());
     List<TrafficDto> actualPath = this.trafficService.getPath(123L);
     assertSame(trafficDtoList, actualPath);
@@ -96,7 +106,9 @@ public class TrafficServiceTest {
     verify(this.trafficRepository).findAll();
   }
 
-
+  /**
+   * Тест метода getStatus
+   */
   @Test
   public void testGetStatus() {
     when(this.mailRepository.findAll()).thenReturn(new ArrayList<Mail>());
@@ -106,7 +118,9 @@ public class TrafficServiceTest {
     verify(this.trafficRepository).findAll();
   }
 
-
+  /**
+   * Тест метода newTraffic
+   */
   @Test
   public void testNewTraffic() {
     when(this.mailRepository.findAll()).thenReturn(new ArrayList<Mail>());

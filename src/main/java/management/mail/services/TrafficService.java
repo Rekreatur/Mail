@@ -9,11 +9,11 @@ import management.mail.domain.Mail;
 import management.mail.domain.Office;
 import management.mail.domain.Traffic;
 import management.mail.dto.TrafficDto;
-import management.mail.servicesinterface.TrafficConverterInterface;
-import management.mail.servicesinterface.TrafficServiceInterface;
 import management.mail.repo.MailRepository;
 import management.mail.repo.OfficeRepository;
 import management.mail.repo.TrafficRepository;
+import management.mail.servicesinterface.TrafficConverterInterface;
+import management.mail.servicesinterface.TrafficServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

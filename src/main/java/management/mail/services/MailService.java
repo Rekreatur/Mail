@@ -3,9 +3,9 @@ package management.mail.services;
 import java.util.List;
 import management.mail.domain.Mail;
 import management.mail.dto.MailDto;
+import management.mail.repo.MailRepository;
 import management.mail.servicesinterface.MailConverterInterface;
 import management.mail.servicesinterface.MailServiceInterface;
-import management.mail.repo.MailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

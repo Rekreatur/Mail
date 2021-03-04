@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import management.mail.domain.Office;
 import management.mail.dto.OfficeDto;
-import management.mail.servicesinterface.OfficeConverterInterface;
 import management.mail.repo.OfficeRepository;
+import management.mail.servicesinterface.OfficeConverterInterface;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +41,9 @@ public class OfficeServiceTest {
   @Autowired
   private OfficeService officeService;
 
+  /**
+   * Тест метода findAll
+   */
   @Test
   public void testFindAll() {
     ArrayList<OfficeDto> officeDtoList = new ArrayList<OfficeDto>();
@@ -53,6 +56,9 @@ public class OfficeServiceTest {
     verify(this.officeRepository).findAll();
   }
 
+  /**
+   * Тест метода getOne
+   */
   @Test
   public void testGetOne() {
     OfficeDto officeDto = new OfficeDto();
@@ -70,7 +76,9 @@ public class OfficeServiceTest {
     verify(this.officeRepository).findById((Long) any());
   }
 
-
+  /**
+   * Тест метода newOffice
+   */
   @Test
   public void testNewOffice() {
     Office office = new Office();
@@ -94,6 +102,9 @@ public class OfficeServiceTest {
     verify(this.officeRepository).saveAndFlush((Office) any());
   }
 
+  /**
+   * Тест метода edit
+   */
   @Test
   public void testEdit() {
     Office office = new Office();
@@ -127,7 +138,9 @@ public class OfficeServiceTest {
     verify(this.officeRepository).saveAndFlush((Office) any());
   }
 
-
+  /**
+   * Тест метода delete
+   */
   @Test
   public void testDelete() {
     Office office = new Office();

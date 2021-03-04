@@ -39,7 +39,7 @@ public class TrafficConverter implements TrafficConverterInterface {
    * @return List TrafficDto, полученный из List Entity Traffic
    */
   public List<TrafficDto> entityToDto(List<Traffic> traffic) {
-    return traffic.stream().map(x -> entityToDto(x)).collect(Collectors.toList());
+    return traffic.stream().map(this::entityToDto).collect(Collectors.toList());
   }
 
   /**
@@ -65,7 +65,7 @@ public class TrafficConverter implements TrafficConverterInterface {
    * @return List Entity Traffic, полученный из List TrafficDto
    */
   public List<Traffic> dtoToEntity(List<TrafficDto> trafficDtos) {
-    return trafficDtos.stream().map(x -> dtoToEntity(x)).collect(Collectors.toList());
+    return trafficDtos.stream().map(this::dtoToEntity).collect(Collectors.toList());
   }
 
   /**

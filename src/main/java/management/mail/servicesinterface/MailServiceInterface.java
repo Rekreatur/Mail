@@ -1,8 +1,7 @@
 package management.mail.servicesinterface;
 
-import management.mail.dto.MailDto;
-
 import java.util.List;
+import management.mail.dto.MailDto;
 
 /**
  * Интерфейс с методами для работы с почтовыми отправлениями

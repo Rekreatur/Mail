@@ -38,7 +38,7 @@ public class OfficeConverter implements OfficeConverterInterface {
    * @return List OfficeDto, полученный из List Entity Office
    */
   public List<OfficeDto> entityToDto(List<Office> offices) {
-    return offices.stream().map(x -> entityToDto(x)).collect(Collectors.toList());
+    return offices.stream().map(this::entityToDto).collect(Collectors.toList());
   }
 
   /**
@@ -63,7 +63,7 @@ public class OfficeConverter implements OfficeConverterInterface {
    * @return List Entity Office, полученный из List OfficeDto
    */
   public List<Office> dtoToEntity(List<OfficeDto> officeDtos) {
-    return officeDtos.stream().map(x -> dtoToEntity(x)).collect(Collectors.toList());
+    return officeDtos.stream().map(this::dtoToEntity).collect(Collectors.toList());
   }
 
   /**

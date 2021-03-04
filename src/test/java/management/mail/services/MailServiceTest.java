@@ -13,8 +13,8 @@ import java.util.Optional;
 import management.mail.constants.MailTypeEnum;
 import management.mail.domain.Mail;
 import management.mail.dto.MailDto;
-import management.mail.servicesinterface.MailConverterInterface;
 import management.mail.repo.MailRepository;
+import management.mail.servicesinterface.MailConverterInterface;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @author Байрамов Искандер
  * @version 1.1
  */
-@ContextConfiguration(classes = {MailRepository.class, MailConverterInterface.class, MailService.class})
+@ContextConfiguration(classes = {MailRepository.class, MailConverterInterface.class,
+    MailService.class})
 @ExtendWith(SpringExtension.class)
 public class MailServiceTest {
 
@@ -41,6 +42,9 @@ public class MailServiceTest {
   @Autowired
   private MailService mailService;
 
+  /**
+   * Тест метода findAll
+   */
   @Test
   public void testFindAll() {
     ArrayList<MailDto> mailDtoList = new ArrayList<MailDto>();
@@ -53,6 +57,9 @@ public class MailServiceTest {
     verify(this.mailRepository).findAll();
   }
 
+  /**
+   * Тест метода getOne
+   */
   @Test
   public void testGetOne() {
     MailDto mailDto = new MailDto();
@@ -71,7 +78,9 @@ public class MailServiceTest {
     verify(this.mailRepository).findById((Long) any());
   }
 
-
+  /**
+   * Тест метода registration
+   */
   @Test
   public void testRegistration() {
     Mail mail = new Mail();
@@ -97,6 +106,9 @@ public class MailServiceTest {
     verify(this.mailRepository).saveAndFlush((Mail) any());
   }
 
+  /**
+   * Тест метода edit
+   */
   @Test
   public void testEdit() {
     Mail mail = new Mail();
@@ -107,7 +119,8 @@ public class MailServiceTest {
     mail.setAddress("42 Main St");
     MailDto mailDto = new MailDto();
     when(this.mailConverterInterface.entityToDto((Mail) any())).thenReturn(mailDto);
-    when(this.mailConverterInterface.dtoToEntityEdit((MailDto) any(), (Mail) any())).thenReturn(mail);
+    when(this.mailConverterInterface.dtoToEntityEdit((MailDto) any(), (Mail) any()))
+        .thenReturn(mail);
 
     Mail mail1 = new Mail();
     mail1.setId(123L);
@@ -132,6 +145,9 @@ public class MailServiceTest {
     verify(this.mailRepository).saveAndFlush((Mail) any());
   }
 
+  /**
+   * Тест метода delete
+   */
   @Test
   public void testDelete() {
     Mail mail = new Mail();

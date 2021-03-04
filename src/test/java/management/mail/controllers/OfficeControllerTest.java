@@ -37,6 +37,11 @@ public class OfficeControllerTest {
   @MockBean
   private OfficeServiceInterface officeServiceInterface;
 
+  /**
+   * Тест метода findAll
+   *
+   * @throws Exception
+   */
   @Test
   public void testFindAll() throws Exception {
     when(this.officeServiceInterface.findAll()).thenReturn(new ArrayList<OfficeDto>());
@@ -49,7 +54,11 @@ public class OfficeControllerTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("[]")));
   }
 
-
+  /**
+   * Тест метода getOne
+   *
+   * @throws Exception
+   */
   @Test
   public void testGetOne() throws Exception {
     when(this.officeServiceInterface.getOne((Long) any())).thenReturn(new OfficeDto());
@@ -64,7 +73,11 @@ public class OfficeControllerTest {
                 .containsString("{\"id\":null,\"index\":null,\"name\":null,\"address\":null}")));
   }
 
-
+  /**
+   * Тест метода newOffice
+   *
+   * @throws Exception
+   */
   @Test
   public void testNewOffice() throws Exception {
     when(this.officeServiceInterface.newOffice((OfficeDto) any())).thenReturn(new OfficeDto());
@@ -84,9 +97,15 @@ public class OfficeControllerTest {
                 .containsString("{\"id\":null,\"index\":null,\"name\":null,\"address\":null}")));
   }
 
+  /**
+   * Тест метода edit
+   *
+   * @throws Exception
+   */
   @Test
   public void testEdit() throws Exception {
-    when(this.officeServiceInterface.edit((Long) any(), (OfficeDto) any())).thenReturn(new OfficeDto());
+    when(this.officeServiceInterface.edit((Long) any(), (OfficeDto) any()))
+        .thenReturn(new OfficeDto());
     MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders
         .put("/editoffice/{id}", 1L)
         .contentType(MediaType.APPLICATION_JSON);
@@ -104,6 +123,11 @@ public class OfficeControllerTest {
                 .containsString("{\"id\":null,\"index\":null,\"name\":null,\"address\":null}")));
   }
 
+  /**
+   * Тест метода delete
+   *
+   * @throws Exception
+   */
   @Test
   public void testDelete() throws Exception {
     doNothing().when(this.officeServiceInterface).delete((Long) any());

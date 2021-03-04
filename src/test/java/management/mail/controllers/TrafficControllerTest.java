@@ -36,6 +36,11 @@ public class TrafficControllerTest {
   @MockBean
   private TrafficServiceInterface trafficServiceInterface;
 
+  /**
+   * Тест метода findAll
+   *
+   * @throws Exception
+   */
   @Test
   public void testFindAll() throws Exception {
     when(this.trafficServiceInterface.findAll()).thenReturn(new ArrayList<TrafficDto>());
@@ -48,6 +53,11 @@ public class TrafficControllerTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("[]")));
   }
 
+  /**
+   * Тест метода getOne
+   *
+   * @throws Exception
+   */
   @Test
   public void testGetOne() throws Exception {
     when(this.trafficServiceInterface.getOne((Long) any())).thenReturn(new TrafficDto());
@@ -62,10 +72,15 @@ public class TrafficControllerTest {
                 "{\"id\":null,\"mail_id\":null,\"post_office_id\":null,\"status\":null,\"date\":null}")));
   }
 
-
+  /**
+   * Тест метода getPath
+   *
+   * @throws Exception
+   */
   @Test
   public void testGetPath() throws Exception {
-    when(this.trafficServiceInterface.getPath((Long) any())).thenReturn(new ArrayList<TrafficDto>());
+    when(this.trafficServiceInterface.getPath((Long) any()))
+        .thenReturn(new ArrayList<TrafficDto>());
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/fullpath/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.trafficController)
         .build()
@@ -75,7 +90,11 @@ public class TrafficControllerTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("[]")));
   }
 
-
+  /**
+   * Тест метода getStatus
+   *
+   * @throws Exception
+   */
   @Test
   public void testGetStatus() throws Exception {
     when(this.trafficServiceInterface.getStatus((Long) any())).thenReturn("foo");
@@ -88,7 +107,11 @@ public class TrafficControllerTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("foo")));
   }
 
-
+  /**
+   * Тест метода newTraffic
+   *
+   * @throws Exception
+   */
   @Test
   public void testNewTraffic() throws Exception {
     when(this.trafficServiceInterface.newTraffic((TrafficDto) any())).thenReturn("foo");

@@ -39,7 +39,7 @@ public class MailConverter implements MailConverterInterface {
    * @return List MailDto, полученный из List Entity Mail
    */
   public List<MailDto> entityToDto(List<Mail> mail) {
-    return mail.stream().map(x -> entityToDto(x)).collect(Collectors.toList());
+    return mail.stream().map(this::entityToDto).collect(Collectors.toList());
   }
 
   /**
@@ -65,7 +65,7 @@ public class MailConverter implements MailConverterInterface {
    * @return List Entity Mail, полученный из List MailDto
    */
   public List<Mail> dtoToEntity(List<MailDto> dto) {
-    return dto.stream().map(x -> dtoToEntity(x)).collect(Collectors.toList());
+    return dto.stream().map(this::dtoToEntity).collect(Collectors.toList());
   }
 
   /**

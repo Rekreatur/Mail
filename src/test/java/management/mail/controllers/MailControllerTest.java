@@ -37,6 +37,11 @@ public class MailControllerTest {
   @MockBean
   private MailServiceInterface mailServiceInterface;
 
+  /**
+   * Тест метода findAll
+   *
+   * @throws Exception
+   */
   @Test
   public void testFindAll() throws Exception {
     when(this.mailServiceInterface.findAll()).thenReturn(new ArrayList<MailDto>());
@@ -49,7 +54,11 @@ public class MailControllerTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("[]")));
   }
 
-
+  /**
+   * Тест метода getOne
+   *
+   * @throws Exception
+   */
   @Test
   public void testGetOne() throws Exception {
     when(this.mailServiceInterface.getOne((Long) any())).thenReturn(new MailDto());
@@ -65,7 +74,11 @@ public class MailControllerTest {
                     "{\"id\":null,\"type\":null,\"index\":null,\"address\":null,\"name\":null}")));
   }
 
-
+  /**
+   * Тест метода registration
+   *
+   * @throws Exception
+   */
   @Test
   public void testRegistration() throws Exception {
     when(this.mailServiceInterface.registration((MailDto) any())).thenReturn(new MailDto());
@@ -86,6 +99,11 @@ public class MailControllerTest {
                     "{\"id\":null,\"type\":null,\"index\":null,\"address\":null,\"name\":null}")));
   }
 
+  /**
+   * Тест метода edit
+   *
+   * @throws Exception
+   */
   @Test
   public void testEdit() throws Exception {
     when(this.mailServiceInterface.edit((Long) any(), (MailDto) any())).thenReturn(new MailDto());
@@ -106,6 +124,11 @@ public class MailControllerTest {
                     "{\"id\":null,\"type\":null,\"index\":null,\"address\":null,\"name\":null}")));
   }
 
+  /**
+   * Тест метода delete
+   *
+   * @throws Exception
+   */
   @Test
   public void testDelete() throws Exception {
     doNothing().when(this.mailServiceInterface).delete((Long) any());
