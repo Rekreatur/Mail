@@ -41,9 +41,6 @@ public class OfficeServiceTest {
   @Autowired
   private OfficeService officeService;
 
-  /**
-   * Тест метода findAll
-   */
   @Test
   public void testFindAll() {
     ArrayList<OfficeDto> officeDtoList = new ArrayList<OfficeDto>();
@@ -56,12 +53,9 @@ public class OfficeServiceTest {
     verify(this.officeRepository).findAll();
   }
 
-  /**
-   * Тест метода getOne
-   */
   @Test
   public void testGetOne() {
-    OfficeDto officeDto = new OfficeDto();
+    OfficeDto officeDto = new OfficeDto(123L, "Index", "Name", "42 Main St");
     when(this.officeConverterInterface.entityToDto((Office) any())).thenReturn(officeDto);
 
     Office office = new Office();
@@ -76,9 +70,6 @@ public class OfficeServiceTest {
     verify(this.officeRepository).findById((Long) any());
   }
 
-  /**
-   * Тест метода newOffice
-   */
   @Test
   public void testNewOffice() {
     Office office = new Office();
@@ -93,18 +84,16 @@ public class OfficeServiceTest {
     office1.setName("Name");
     office1.setIndex("Index");
     office1.setAddress("42 Main St");
-    OfficeDto officeDto = new OfficeDto();
+    OfficeDto officeDto = new OfficeDto(123L, "Index", "Name", "42 Main St");
     when(this.officeConverterInterface.entityToDto((Office) any())).thenReturn(officeDto);
     when(this.officeConverterInterface.dtoToEntity((OfficeDto) any())).thenReturn(office1);
-    assertSame(officeDto, this.officeService.newOffice(new OfficeDto()));
-    verify(this.officeConverterInterface).entityToDto((Office) any());
+    assertSame(officeDto,
+        this.officeService.newOffice(new OfficeDto(123L, "Index", "Name", "42 Main St")));
     verify(this.officeConverterInterface).dtoToEntity((OfficeDto) any());
+    verify(this.officeConverterInterface).entityToDto((Office) any());
     verify(this.officeRepository).saveAndFlush((Office) any());
   }
 
-  /**
-   * Тест метода edit
-   */
   @Test
   public void testEdit() {
     Office office = new Office();
@@ -112,7 +101,7 @@ public class OfficeServiceTest {
     office.setName("Name");
     office.setIndex("Index");
     office.setAddress("42 Main St");
-    OfficeDto officeDto = new OfficeDto();
+    OfficeDto officeDto = new OfficeDto(123L, "Index", "Name", "42 Main St");
     when(this.officeConverterInterface.entityToDto((Office) any())).thenReturn(officeDto);
     when(this.officeConverterInterface.dtoToEntityEdit((OfficeDto) any(), (Office) any()))
         .thenReturn(office);
@@ -131,16 +120,14 @@ public class OfficeServiceTest {
     office2.setAddress("42 Main St");
     when(this.officeRepository.saveAndFlush((Office) any())).thenReturn(office2);
     when(this.officeRepository.findById((Long) any())).thenReturn(ofResult);
-    assertSame(officeDto, this.officeService.edit(123L, new OfficeDto()));
-    verify(this.officeConverterInterface).entityToDto((Office) any());
+    assertSame(officeDto,
+        this.officeService.edit(123L, new OfficeDto(123L, "Index", "Name", "42 Main St")));
     verify(this.officeConverterInterface).dtoToEntityEdit((OfficeDto) any(), (Office) any());
+    verify(this.officeConverterInterface).entityToDto((Office) any());
     verify(this.officeRepository).findById((Long) any());
     verify(this.officeRepository).saveAndFlush((Office) any());
   }
 
-  /**
-   * Тест метода delete
-   */
   @Test
   public void testDelete() {
     Office office = new Office();
@@ -155,6 +142,5 @@ public class OfficeServiceTest {
     verify(this.officeRepository).delete((Office) any());
     verify(this.officeRepository).findById((Long) any());
   }
-
 }
 

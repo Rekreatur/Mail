@@ -23,11 +23,8 @@ public class OfficeConverter implements OfficeConverterInterface {
    * @return OfficeDto, полученную из Entity Office
    */
   public OfficeDto entityToDto(Office office) {
-    OfficeDto dto = new OfficeDto();
-    dto.setId(office.getId());
-    dto.setIndex(office.getIndex());
-    dto.setName(office.getName());
-    dto.setAddress(office.getAddress());
+    OfficeDto dto = new OfficeDto(office.getId(), office.getIndex(), office.getName(),
+        office.getAddress());
     return dto;
   }
 

@@ -4,7 +4,9 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import management.mail.constants.TrafficOfficeStatusEnum;
 import management.mail.dto.TrafficDto;
 import management.mail.servicesinterface.TrafficServiceInterface;
 import org.hamcrest.Matchers;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -36,11 +39,6 @@ public class TrafficControllerTest {
   @MockBean
   private TrafficServiceInterface trafficServiceInterface;
 
-  /**
-   * Тест метода findAll
-   *
-   * @throws Exception
-   */
   @Test
   public void testFindAll() throws Exception {
     when(this.trafficServiceInterface.findAll()).thenReturn(new ArrayList<TrafficDto>());
@@ -53,14 +51,11 @@ public class TrafficControllerTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("[]")));
   }
 
-  /**
-   * Тест метода getOne
-   *
-   * @throws Exception
-   */
   @Test
   public void testGetOne() throws Exception {
-    when(this.trafficServiceInterface.getOne((Long) any())).thenReturn(new TrafficDto());
+    when(this.trafficServiceInterface.getOne((Long) any()))
+        .thenReturn(new TrafficDto(123L, 1L, 1L, TrafficOfficeStatusEnum.ARRIVED,
+            LocalDateTime.of(1, 1, 1, 1, 1)));
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/traffic/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.trafficController)
         .build()
@@ -69,14 +64,9 @@ public class TrafficControllerTest {
         .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
         .andExpect(MockMvcResultMatchers.content()
             .string(Matchers.containsString(
-                "{\"id\":null,\"mail_id\":null,\"post_office_id\":null,\"status\":null,\"date\":null}")));
+                "{\"id\":123,\"mail_id\":1,\"post_office_id\":1,\"status\":\"ARRIVED\",\"date\":\"0001-01-01 01:01:00\"}")));
   }
 
-  /**
-   * Тест метода getPath
-   *
-   * @throws Exception
-   */
   @Test
   public void testGetPath() throws Exception {
     when(this.trafficServiceInterface.getPath((Long) any()))
@@ -90,11 +80,6 @@ public class TrafficControllerTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("[]")));
   }
 
-  /**
-   * Тест метода getStatus
-   *
-   * @throws Exception
-   */
   @Test
   public void testGetStatus() throws Exception {
     when(this.trafficServiceInterface.getStatus((Long) any())).thenReturn("foo");
@@ -107,26 +92,21 @@ public class TrafficControllerTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("foo")));
   }
 
-  /**
-   * Тест метода newTraffic
-   *
-   * @throws Exception
-   */
   @Test
   public void testNewTraffic() throws Exception {
-    when(this.trafficServiceInterface.newTraffic((TrafficDto) any())).thenReturn("foo");
-    MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders.post("/newtraffic")
+    MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders
+        .delete("https://example.org/example", "foo", "foo", "foo")
         .contentType(MediaType.APPLICATION_JSON);
 
     ObjectMapper objectMapper = new ObjectMapper();
     MockHttpServletRequestBuilder requestBuilder = contentTypeResult
-        .content(objectMapper.writeValueAsString(new TrafficDto()));
-    MockMvcBuilders.standaloneSetup(this.trafficController)
+        .content(objectMapper.writeValueAsString(
+            new TrafficDto(123L, 1L, 1L, TrafficOfficeStatusEnum.ARRIVED,
+                LocalDateTime.of(1, 1, 1, 1, 1))));
+    ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.trafficController)
         .build()
-        .perform(requestBuilder)
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.content().contentType("text/plain;charset=ISO-8859-1"))
-        .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("foo")));
+        .perform(requestBuilder);
+    actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 }
 

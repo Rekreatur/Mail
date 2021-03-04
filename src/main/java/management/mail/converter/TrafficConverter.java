@@ -23,12 +23,8 @@ public class TrafficConverter implements TrafficConverterInterface {
    * @return TrafficDto, полученную из Entity Traffic
    */
   public TrafficDto entityToDto(Traffic traffic) {
-    TrafficDto dto = new TrafficDto();
-    dto.setId(traffic.getId());
-    dto.setMail_id(traffic.getMail_id());
-    dto.setPost_office_id(traffic.getPost_office_id());
-    dto.setStatus(traffic.getStatus());
-    dto.setDate(traffic.getDate());
+    TrafficDto dto = new TrafficDto(traffic.getId(), traffic.getMail_id(),
+        traffic.getPost_office_id(), traffic.getStatus(), traffic.getDate());
     return dto;
   }
 

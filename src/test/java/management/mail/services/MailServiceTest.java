@@ -28,8 +28,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
  * @author Байрамов Искандер
  * @version 1.1
  */
-@ContextConfiguration(classes = {MailRepository.class, MailConverterInterface.class,
-    MailService.class})
+@ContextConfiguration(classes = {MailRepository.class, MailService.class,
+    MailConverterInterface.class})
 @ExtendWith(SpringExtension.class)
 public class MailServiceTest {
 
@@ -42,9 +42,6 @@ public class MailServiceTest {
   @Autowired
   private MailService mailService;
 
-  /**
-   * Тест метода findAll
-   */
   @Test
   public void testFindAll() {
     ArrayList<MailDto> mailDtoList = new ArrayList<MailDto>();
@@ -57,12 +54,9 @@ public class MailServiceTest {
     verify(this.mailRepository).findAll();
   }
 
-  /**
-   * Тест метода getOne
-   */
   @Test
   public void testGetOne() {
-    MailDto mailDto = new MailDto();
+    MailDto mailDto = new MailDto(123L, MailTypeEnum.LETTER, "Index", "42 Main St", "Name");
     when(this.mailConverterInterface.entityToDto((Mail) any())).thenReturn(mailDto);
 
     Mail mail = new Mail();
@@ -78,9 +72,6 @@ public class MailServiceTest {
     verify(this.mailRepository).findById((Long) any());
   }
 
-  /**
-   * Тест метода registration
-   */
   @Test
   public void testRegistration() {
     Mail mail = new Mail();
@@ -97,18 +88,17 @@ public class MailServiceTest {
     mail1.setIndex("Index");
     mail1.setType(MailTypeEnum.LETTER);
     mail1.setAddress("42 Main St");
-    MailDto mailDto = new MailDto();
+    MailDto mailDto = new MailDto(123L, MailTypeEnum.LETTER, "Index", "42 Main St", "Name");
     when(this.mailConverterInterface.entityToDto((Mail) any())).thenReturn(mailDto);
     when(this.mailConverterInterface.dtoToEntity((MailDto) any())).thenReturn(mail1);
-    assertSame(mailDto, this.mailService.registration(new MailDto()));
-    verify(this.mailConverterInterface).entityToDto((Mail) any());
+    assertSame(mailDto,
+        this.mailService
+            .registration(new MailDto(123L, MailTypeEnum.LETTER, "Index", "42 Main St", "Name")));
     verify(this.mailConverterInterface).dtoToEntity((MailDto) any());
+    verify(this.mailConverterInterface).entityToDto((Mail) any());
     verify(this.mailRepository).saveAndFlush((Mail) any());
   }
 
-  /**
-   * Тест метода edit
-   */
   @Test
   public void testEdit() {
     Mail mail = new Mail();
@@ -117,7 +107,7 @@ public class MailServiceTest {
     mail.setIndex("Index");
     mail.setType(MailTypeEnum.LETTER);
     mail.setAddress("42 Main St");
-    MailDto mailDto = new MailDto();
+    MailDto mailDto = new MailDto(123L, MailTypeEnum.LETTER, "Index", "42 Main St", "Name");
     when(this.mailConverterInterface.entityToDto((Mail) any())).thenReturn(mailDto);
     when(this.mailConverterInterface.dtoToEntityEdit((MailDto) any(), (Mail) any()))
         .thenReturn(mail);
@@ -138,16 +128,15 @@ public class MailServiceTest {
     mail2.setAddress("42 Main St");
     when(this.mailRepository.saveAndFlush((Mail) any())).thenReturn(mail2);
     when(this.mailRepository.findById((Long) any())).thenReturn(ofResult);
-    assertSame(mailDto, this.mailService.edit(123L, new MailDto()));
-    verify(this.mailConverterInterface).entityToDto((Mail) any());
+    assertSame(mailDto,
+        this.mailService
+            .edit(123L, new MailDto(123L, MailTypeEnum.LETTER, "Index", "42 Main St", "Name")));
     verify(this.mailConverterInterface).dtoToEntityEdit((MailDto) any(), (Mail) any());
+    verify(this.mailConverterInterface).entityToDto((Mail) any());
     verify(this.mailRepository).findById((Long) any());
     verify(this.mailRepository).saveAndFlush((Mail) any());
   }
 
-  /**
-   * Тест метода delete
-   */
   @Test
   public void testDelete() {
     Mail mail = new Mail();
@@ -163,7 +152,5 @@ public class MailServiceTest {
     verify(this.mailRepository).delete((Mail) any());
     verify(this.mailRepository).findById((Long) any());
   }
-
-
 }
 

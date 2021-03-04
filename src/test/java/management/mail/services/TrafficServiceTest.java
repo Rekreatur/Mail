@@ -53,9 +53,6 @@ public class TrafficServiceTest {
   @Autowired
   private TrafficService trafficService;
 
-  /**
-   * Тест метода findAll
-   */
   @Test
   public void testFindAll() {
     ArrayList<TrafficDto> trafficDtoList = new ArrayList<TrafficDto>();
@@ -69,12 +66,10 @@ public class TrafficServiceTest {
     verify(this.trafficRepository).findAll();
   }
 
-  /**
-   * Тест метода getOne
-   */
   @Test
   public void testGetOne() {
-    TrafficDto trafficDto = new TrafficDto();
+    TrafficDto trafficDto = new TrafficDto(123L, 1L, 1L, TrafficOfficeStatusEnum.ARRIVED,
+        LocalDateTime.of(1, 1, 1, 1, 1));
     when(this.trafficConverterInterface.entityToDto((Traffic) any())).thenReturn(trafficDto);
 
     Traffic traffic = new Traffic();
@@ -90,9 +85,6 @@ public class TrafficServiceTest {
     verify(this.trafficRepository).findById((Long) any());
   }
 
-  /**
-   * Тест метода getPath
-   */
   @Test
   public void testGetPath() {
     ArrayList<TrafficDto> trafficDtoList = new ArrayList<TrafficDto>();
@@ -106,9 +98,6 @@ public class TrafficServiceTest {
     verify(this.trafficRepository).findAll();
   }
 
-  /**
-   * Тест метода getStatus
-   */
   @Test
   public void testGetStatus() {
     when(this.mailRepository.findAll()).thenReturn(new ArrayList<Mail>());
@@ -118,17 +107,14 @@ public class TrafficServiceTest {
     verify(this.trafficRepository).findAll();
   }
 
-  /**
-   * Тест метода newTraffic
-   */
   @Test
   public void testNewTraffic() {
     when(this.mailRepository.findAll()).thenReturn(new ArrayList<Mail>());
-    assertEquals("The postal item does not exist",
-        this.trafficService.newTraffic(new TrafficDto()));
+    assertEquals("The postal item does not exist", this.trafficService
+        .newTraffic(new TrafficDto(123L, 1L, 1L, TrafficOfficeStatusEnum.ARRIVED,
+            LocalDateTime.of(1, 1, 1, 1, 1))));
     verify(this.mailRepository).findAll();
   }
-
 
 }
 

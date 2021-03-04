@@ -188,9 +188,10 @@ public class TrafficService implements TrafficServiceInterface {
       }
     }
 
-    trafficDto.setDate(LocalDateTime.now());
+    Traffic traffic = trafficConverter.dtoToEntity(trafficDto);
+    traffic.setDate(LocalDateTime.now());
 
-    trafficRepository.saveAndFlush(trafficConverter.dtoToEntity(trafficDto));
+    trafficRepository.saveAndFlush(traffic);
 
     return "new mail movement added";
   }

@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import management.mail.constants.MailTypeEnum;
 import management.mail.dto.MailDto;
 import management.mail.servicesinterface.MailServiceInterface;
 import org.hamcrest.Matchers;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -37,11 +39,6 @@ public class MailControllerTest {
   @MockBean
   private MailServiceInterface mailServiceInterface;
 
-  /**
-   * Тест метода findAll
-   *
-   * @throws Exception
-   */
   @Test
   public void testFindAll() throws Exception {
     when(this.mailServiceInterface.findAll()).thenReturn(new ArrayList<MailDto>());
@@ -54,14 +51,10 @@ public class MailControllerTest {
         .andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("[]")));
   }
 
-  /**
-   * Тест метода getOne
-   *
-   * @throws Exception
-   */
   @Test
   public void testGetOne() throws Exception {
-    when(this.mailServiceInterface.getOne((Long) any())).thenReturn(new MailDto());
+    when(this.mailServiceInterface.getOne((Long) any()))
+        .thenReturn(new MailDto(123L, MailTypeEnum.LETTER, "Index", "42 Main St", "Name"));
     MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get("/mail/{id}", 1L);
     MockMvcBuilders.standaloneSetup(this.mailController)
         .build()
@@ -69,66 +62,10 @@ public class MailControllerTest {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
         .andExpect(MockMvcResultMatchers.content()
-            .string(
-                Matchers.containsString(
-                    "{\"id\":null,\"type\":null,\"index\":null,\"address\":null,\"name\":null}")));
+            .string(Matchers.containsString(
+                "{\"id\":123,\"type\":\"LETTER\",\"index\":\"Index\",\"address\":\"42 Main St\",\"name\":\"Name\"}")));
   }
 
-  /**
-   * Тест метода registration
-   *
-   * @throws Exception
-   */
-  @Test
-  public void testRegistration() throws Exception {
-    when(this.mailServiceInterface.registration((MailDto) any())).thenReturn(new MailDto());
-    MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders.post("/registration")
-        .contentType(MediaType.APPLICATION_JSON);
-
-    ObjectMapper objectMapper = new ObjectMapper();
-    MockHttpServletRequestBuilder requestBuilder = contentTypeResult
-        .content(objectMapper.writeValueAsString(new MailDto()));
-    MockMvcBuilders.standaloneSetup(this.mailController)
-        .build()
-        .perform(requestBuilder)
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-        .andExpect(MockMvcResultMatchers.content()
-            .string(
-                Matchers.containsString(
-                    "{\"id\":null,\"type\":null,\"index\":null,\"address\":null,\"name\":null}")));
-  }
-
-  /**
-   * Тест метода edit
-   *
-   * @throws Exception
-   */
-  @Test
-  public void testEdit() throws Exception {
-    when(this.mailServiceInterface.edit((Long) any(), (MailDto) any())).thenReturn(new MailDto());
-    MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders.put("/edit/{id}", 1L)
-        .contentType(MediaType.APPLICATION_JSON);
-
-    ObjectMapper objectMapper = new ObjectMapper();
-    MockHttpServletRequestBuilder requestBuilder = contentTypeResult
-        .content(objectMapper.writeValueAsString(new MailDto()));
-    MockMvcBuilders.standaloneSetup(this.mailController)
-        .build()
-        .perform(requestBuilder)
-        .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-        .andExpect(MockMvcResultMatchers.content()
-            .string(
-                Matchers.containsString(
-                    "{\"id\":null,\"type\":null,\"index\":null,\"address\":null,\"name\":null}")));
-  }
-
-  /**
-   * Тест метода delete
-   *
-   * @throws Exception
-   */
   @Test
   public void testDelete() throws Exception {
     doNothing().when(this.mailServiceInterface).delete((Long) any());
@@ -138,6 +75,22 @@ public class MailControllerTest {
         .build()
         .perform(requestBuilder)
         .andExpect(MockMvcResultMatchers.status().isOk());
+  }
+
+  @Test
+  public void testRegistration() throws Exception {
+    MockHttpServletRequestBuilder contentTypeResult = MockMvcRequestBuilders
+        .delete("https://example.org/example", "foo", "foo", "foo")
+        .contentType(MediaType.APPLICATION_JSON);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    MockHttpServletRequestBuilder requestBuilder = contentTypeResult.content(
+        objectMapper.writeValueAsString(
+            new MailDto(123L, MailTypeEnum.LETTER, "Index", "42 Main St", "Name")));
+    ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(this.mailController)
+        .build()
+        .perform(requestBuilder);
+    actualPerformResult.andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 }
 

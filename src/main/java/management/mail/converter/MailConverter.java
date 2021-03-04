@@ -23,12 +23,8 @@ public class MailConverter implements MailConverterInterface {
    * @return MailDto, полученную из Entity Mail
    */
   public MailDto entityToDto(Mail mail) {
-    MailDto dto = new MailDto();
-    dto.setId(mail.getId());
-    dto.setType(mail.getType());
-    dto.setIndex(mail.getIndex());
-    dto.setAddress(mail.getAddress());
-    dto.setName(mail.getName());
+    MailDto dto = new MailDto(mail.getId(), mail.getType(), mail.getIndex(), mail.getAddress(),
+        mail.getName());
     return dto;
   }
 

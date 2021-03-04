@@ -1,6 +1,6 @@
 package management.mail.dto;
 
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * Dto для Entity Office
@@ -8,26 +8,33 @@ import lombok.Data;
  * @author Байрамов Искандер
  * @version 1.1
  */
-@Data
+@Getter
 public final class OfficeDto {
 
   /**
    * Поле со значением id
    */
-  private Long id;
+  private final Long id;
 
   /**
    * Поле со значением индекса почтового отделения
    */
-  private String index;
+  private final String index;
 
   /**
    * Поле со значанием названия почтового отделения
    */
-  private String name;
+  private final String name;
 
   /**
    * Поле со значаением адреса почтового отделения
    */
-  private String address;
+  private final String address;
+
+  public OfficeDto(Long id, String index, String name, String address) {
+    this.id = id;
+    this.index = index;
+    this.name = name;
+    this.address = address;
+  }
 }
